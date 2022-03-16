@@ -67,30 +67,41 @@ namespace Authentication
             Boolean validPassword;
             Console.Clear();
             Console.WriteLine("==CREATE USER==");
+            Console.WriteLine("(Enter a single 'x' first name/last name to return to main menu)");
             do
             {
                 Console.Write("First Name: ");
                 firstName = Console.ReadLine();
-                if (firstName.Contains(" "))
+                if (firstName.Replace(" ", "").ToLower() == "x")
                 {
-                    Console.WriteLine("Tidak boleh ada spasi.");
+                    Console.Clear();
+                    return;
                 }
-                if (firstName.Length < 2)
+                else if (firstName.Length < 2)
                 {
                     Console.WriteLine("Tidak boleh kurang dari dua huruf");
+                }
+                else if (firstName.Contains(" "))
+                {
+                    Console.WriteLine("Tidak boleh ada spasi.");
                 }
             } while (firstName.Contains(" ") || firstName.Length < 2);
             do
             {
                 Console.Write("Last Name: ");
                 lastName = Console.ReadLine();
-                if (lastName.Contains(" "))
+                if (lastName.Replace(" ", "").ToLower() == "x")
                 {
-                    Console.WriteLine("Tidak boleh ada spasi.");
+                    Console.Clear();
+                    return;
                 }
-                if (lastName.Length < 2)
+                else if (lastName.Length < 2)
                 {
                     Console.WriteLine("Tidak boleh kurang dari dua huruf");
+                }
+                else if (lastName.Contains(" "))
+                {
+                    Console.WriteLine("Tidak boleh ada spasi.");
                 }
             } while (lastName.Contains(" ") || lastName.Length < 2);
             Console.Write("Username: ");
