@@ -1,13 +1,17 @@
 ﻿using System;
-
-namespace ManipulasiString_GenerateInvoice
+using System.Text.RegularExpressions;
+namespace GenerateInvoice
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.Write("INPUT: ");
-            string input = Console.ReadLine();
+            string input;
+            do
+            {
+                Console.Write("INPUT A NUMBER: ");
+                input = Console.ReadLine();
+            } while (!Regex.IsMatch(input, "[0-9]"));
             string output = GenerateInvoice(input);
             Console.WriteLine(output);
         }

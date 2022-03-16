@@ -1,0 +1,8 @@
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\bin\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.exe.config
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\bin\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.exe
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\bin\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.pdb
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\obj\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.csproj.AssemblyReference.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\obj\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.csproj.SuggestedBindingRedirects.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\obj\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.csproj.CoreCompileInputs.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\obj\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.exe
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\BasicProgrammingWithOOP-KalkulatorMatriks2D\obj\Debug\BasicProgrammingWithOOP-KalkulatorMatriks2D.pdb

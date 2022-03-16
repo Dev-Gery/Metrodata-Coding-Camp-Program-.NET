@@ -1,0 +1,8 @@
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\bin\Debug\Generate-Invoice.exe.config
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\bin\Debug\Generate-Invoice.exe
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\bin\Debug\Generate-Invoice.pdb
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\obj\Debug\Generate-Invoice.csproj.AssemblyReference.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\obj\Debug\Generate-Invoice.csproj.SuggestedBindingRedirects.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\obj\Debug\Generate-Invoice.csproj.CoreCompileInputs.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\obj\Debug\Generate-Invoice.exe
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Generate-Invoice\obj\Debug\Generate-Invoice.pdb

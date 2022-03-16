@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ConsoleApp2
+namespace ProgramOOPDasar
 {
     internal class KalkulatorMatriks2D
     {
@@ -26,7 +26,7 @@ namespace ConsoleApp2
         {
             Console.Write("Pilih operasi yang tersedia atau 'Keluar' untuk berhenti: ");
             Console.WriteLine("\n(1) Penjumlahan\n(2) Perkalian\n(3) Riwayat Operasi\n(4) Keluar");
-            Console.Write("Input: "); 
+            Console.Write("Input: ");
             string pilihan = Console.ReadLine();
             return pilihan;
         }
@@ -49,14 +49,15 @@ namespace ConsoleApp2
                         Console.WriteLine("\nUkuran kolom matriks A harusn sama dengan ukuran baris matriks B: A [..., n] dan B[n, ...]");
                         multiplication = true;
                     }
-                    Console.WriteLine("Tentukan ukuran matriks A:"); 
+                    Console.WriteLine("Tentukan ukuran matriks A:");
                     Console.Write("\tBaris: "); m1 = int.Parse(Console.ReadLine());
                     Console.Write("\tKolom: "); n1 = int.Parse(Console.ReadLine());
-                    Console.WriteLine("Tentukan ukuran matriks B:"); 
+                    Console.WriteLine("Tentukan ukuran matriks B:");
                     Console.Write("\tBaris: "); m2 = int.Parse(Console.ReadLine());
                     Console.Write("\tKolom: "); n2 = int.Parse(Console.ReadLine());
                 } while ((addition && (m1 != m2 || n1 != n2)) || (multiplication && (n1 != m2)));
                 Console.WriteLine("Masukkan nilai-nilai matriks A dan B:");
+                Console.WriteLine();
                 Matriks2D matriksA = new Matriks2D(m1, n1);
                 Matriks2D matriksB = new Matriks2D(m2, n2);
                 Matriks2D matriksHasil;
@@ -105,7 +106,7 @@ namespace ConsoleApp2
             {
                 for (int i = 0; i < riwayatOperasi.Count; i++)
                 {
-                    Console.WriteLine($"{i+1}.");
+                    Console.WriteLine($"{i + 1}.");
                     riwayatOperasi[i].tampilkan();
                     Console.WriteLine();
                 }

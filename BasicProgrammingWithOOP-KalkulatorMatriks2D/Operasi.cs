@@ -1,5 +1,5 @@
 ﻿using System;
-namespace ConsoleApp2
+namespace ProgramOOPDasar
 {
     internal class Operasi
     {

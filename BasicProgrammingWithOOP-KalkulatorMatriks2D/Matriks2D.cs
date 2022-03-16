@@ -1,5 +1,5 @@
 ﻿using System;
-namespace ConsoleApp2
+namespace ProgramOOPDasar
 {
     internal class Matriks2D
     {
@@ -88,6 +88,6 @@ namespace ConsoleApp2
             {
                 throw new ArgumentException("Ukuran kolom matriks yang satu harus sama dengan ukuran baris matriks yang lain");
             }
-        } 
+        }
     }
 }
