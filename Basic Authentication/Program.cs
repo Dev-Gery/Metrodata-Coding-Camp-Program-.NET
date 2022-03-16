@@ -47,6 +47,7 @@ namespace Authentication
             else if (input == "5")
             {
                 Exit();
+                return;
             }
             Console.Clear();
         }
@@ -141,117 +142,136 @@ namespace Authentication
         }
         static void SearchOrRemove()
         {
-            string username, fname, lname;
+            string username, fname, lname, keyword, reference;
             List<int> userIdx = new List<int>();
             Console.Clear();
             Console.WriteLine("==SEARCH/REMOVE_USER==");
-            Console.WriteLine("Based on:");
-            Console.WriteLine("1. Username");
-            Console.WriteLine("2. First name/last name");
-            Console.Write("\nInput: ");
-            string choice = Console.ReadLine();
-            switch (choice)
+            Console.Write("Enter keyword (ref. first name and last name): ");
+            keyword = Console.ReadLine();
+            for (int i = 0; i < Accounts.Count; i++)
             {
-                case "1":
-                    Console.Write("Enter username: ");
-                    username = Console.ReadLine();
-                    for (int i = 0; i < Accounts.Count; i++)
-                    {
-                        if (Accounts[i].getUserName() == username)
-                        {
-                            userIdx.Add(i);
-                        }
-                    }
-                    break;
-                case "2":
-                    Console.Write("Enter first name: ");
-                    fname = Console.ReadLine();
-                    Console.Write("Enter last name: ");
-                    lname = Console.ReadLine();
-                    for (int i = 0; i < Accounts.Count; i++)
-                    {
-                        if (Accounts[i].getFirstName() == fname || Accounts[i].getLastName() == lname)
-                        {
-                            userIdx.Add(i);
-                        }
-                    }
-                    break;
-            }
-            int foundCount = userIdx.Count;
-            if (foundCount > 0)
-            {
-                string ans, usrname;
-                switch (foundCount)
+                reference = Accounts[i].getFirstName() + Accounts[i].getLastName();
+                if (reference.ToLower().Contains(keyword))
                 {
-                    case 1:
-                        User choosen = Accounts[userIdx[0]];
-                        Console.WriteLine("==========================");
-                        Console.Write("First Name: ");
-                        Console.WriteLine(choosen.getFirstName());
-                        Console.Write("Last Name: ");
-                        Console.WriteLine(choosen.getLastName());
-                        Console.Write("Username: ");
-                        Console.WriteLine(choosen.getUserName());
-                        Console.Write("Password: ");
-                        Console.WriteLine(choosen.getPassword());
-                        Console.WriteLine("==========================");
-                        usrname = choosen.getUserName();
-                        Console.WriteLine($"Apakah anda ingin menghapus {usrname}? (Y/y)Ya / (T/t)Tidak");
-                        ans = Console.ReadLine();
-                        if (ans.ToLower() == "y")
-                        {
-                            Accounts.Remove(choosen);
-                            Console.WriteLine($"{usrname} Terhapus.");
-                        }
-                        break;
-                    case int n when (n > 1):
-                        for (int i = 0; i < userIdx.Count; i++)
-                        {
-                            Console.WriteLine($"({i + 1})");
-                            Console.WriteLine("==========================");
-                            Console.Write("First Name: ");
-                            Console.WriteLine(Accounts[userIdx[i]].getFirstName());
-                            Console.Write("Last Name: ");
-                            Console.WriteLine(Accounts[userIdx[i]].getLastName());
-                            Console.Write("Username: ");
-                            Console.WriteLine(Accounts[userIdx[i]].getUserName());
-                            Console.Write("Password: ");
-                            Console.WriteLine(Accounts[userIdx[i]].getPassword());
-                            Console.WriteLine("==========================");
-                        }
-                        Console.WriteLine("Apakah anda ingin menghapus salah satu data? (Y)Ya / (T)Tidak");
-                        ans = Console.ReadLine();
-                        if (ans.ToLower().Contains("y"))
-                        {
-                            Console.Write("Pilih nomor dari daftar yang ingin dihapus: ");
-                            int choiceNum = int.Parse(Console.ReadLine());
-                            choosen = Accounts[userIdx[choiceNum - 1]];
-                            Console.WriteLine("==========================");
-                            Console.Write("First Name: ");
-                            Console.WriteLine(choosen.getFirstName());
-                            Console.Write("Last Name: ");
-                            Console.WriteLine(choosen.getLastName());
-                            Console.Write("Username: ");
-                            Console.WriteLine(choosen.getUserName());
-                            Console.Write("Password: ");
-                            Console.WriteLine(choosen.getPassword());
-                            Console.WriteLine("==========================");
-                            usrname = choosen.getUserName();
-                            Console.WriteLine($"Apakah anda ingin menghapus {usrname}? (Y/y)Ya / (T/y)Tidak");
-                            ans = Console.ReadLine();
-                            if (ans.ToLower() == "y")
-                            {
-                                Accounts.Remove(choosen);
-                                Console.WriteLine($"{usrname} Terhapus.");
-                            }
-                        }
-                        break;
+                    Console.WriteLine("==========================");
+                    Console.Write("First Name: ");
+                    Console.WriteLine(Accounts[i].getFirstName());
+                    Console.Write("Last Name: ");
+                    Console.WriteLine(Accounts[i].getLastName());
+                    Console.Write("Username: ");
+                    Console.WriteLine(Accounts[i].getUserName());
+                    Console.Write("Password: ");
+                    Console.WriteLine(Accounts[i].getPassword());
+                    Console.WriteLine("==========================");
                 }
             }
-            else
-            {
-                Console.WriteLine("No user found.");
-            }
+            //Console.WriteLine("Based on:");
+            //Console.WriteLine("1. Username");
+            //Console.WriteLine("2. First name/last name");
+            //Console.Write("\nInput: ");
+            //string choice = Console.ReadLine();
+            //switch (choice)
+            //{
+            //    case "1":
+            //        Console.Write("Enter username: ");
+            //        username = Console.ReadLine();
+            //        for (int i = 0; i < Accounts.Count; i++)
+            //        {
+            //            if (Accounts[i].getUserName() == username)
+            //            {
+            //                userIdx.Add(i);
+            //            }
+            //        }
+            //        break;
+            //    case "2":
+            //        Console.Write("Enter first name: ");
+            //        fname = Console.ReadLine();
+            //        Console.Write("Enter last name: ");
+            //        lname = Console.ReadLine();
+            //        for (int i = 0; i < Accounts.Count; i++)
+            //        {
+            //            if (Accounts[i].getFirstName() == fname || Accounts[i].getLastName() == lname)
+            //            {
+            //                userIdx.Add(i);
+            //            }
+            //        }
+            //        break;
+            //}
+            //int foundCount = userIdx.Count;
+            //if (foundCount > 0)
+            //{
+            //    string ans, usrname;
+            //    switch (foundCount)
+            //    {
+            //        case 1:
+            //            User choosen = Accounts[userIdx[0]];
+            //            Console.WriteLine("==========================");
+            //            Console.Write("First Name: ");
+            //            Console.WriteLine(choosen.getFirstName());
+            //            Console.Write("Last Name: ");
+            //            Console.WriteLine(choosen.getLastName());
+            //            Console.Write("Username: ");
+            //            Console.WriteLine(choosen.getUserName());
+            //            Console.Write("Password: ");
+            //            Console.WriteLine(choosen.getPassword());
+            //            Console.WriteLine("==========================");
+            //            usrname = choosen.getUserName();
+            //            Console.WriteLine($"Apakah anda ingin menghapus {usrname}? (Y/y)Ya / (T/t)Tidak");
+            //            ans = Console.ReadLine();
+            //            if (ans.ToLower() == "y")
+            //            {
+            //                Accounts.Remove(choosen);
+            //                Console.WriteLine($"{usrname} Terhapus.");
+            //            }
+            //            break;
+            //        case int n when (n > 1):
+            //            for (int i = 0; i < userIdx.Count; i++)
+            //            {
+            //                Console.WriteLine($"({i + 1})");
+            //                Console.WriteLine("==========================");
+            //                Console.Write("First Name: ");
+            //                Console.WriteLine(Accounts[userIdx[i]].getFirstName());
+            //                Console.Write("Last Name: ");
+            //                Console.WriteLine(Accounts[userIdx[i]].getLastName());
+            //                Console.Write("Username: ");
+            //                Console.WriteLine(Accounts[userIdx[i]].getUserName());
+            //                Console.Write("Password: ");
+            //                Console.WriteLine(Accounts[userIdx[i]].getPassword());
+            //                Console.WriteLine("==========================");
+            //            }
+            //            Console.WriteLine("Apakah anda ingin menghapus salah satu data? (Y)Ya / (T)Tidak");
+            //            ans = Console.ReadLine();
+            //            if (ans.ToLower().Contains("y"))
+            //            {
+            //                Console.Write("Pilih nomor dari daftar yang ingin dihapus: ");
+            //                int choiceNum = int.Parse(Console.ReadLine());
+            //                choosen = Accounts[userIdx[choiceNum - 1]];
+            //                Console.WriteLine("==========================");
+            //                Console.Write("First Name: ");
+            //                Console.WriteLine(choosen.getFirstName());
+            //                Console.Write("Last Name: ");
+            //                Console.WriteLine(choosen.getLastName());
+            //                Console.Write("Username: ");
+            //                Console.WriteLine(choosen.getUserName());
+            //                Console.Write("Password: ");
+            //                Console.WriteLine(choosen.getPassword());
+            //                Console.WriteLine("==========================");
+            //                usrname = choosen.getUserName();
+            //                Console.WriteLine($"Apakah anda ingin menghapus {usrname}? (Y/y)Ya / (T/y)Tidak");
+            //                ans = Console.ReadLine();
+            //                if (ans.ToLower() == "y")
+            //                {
+            //                    Accounts.Remove(choosen);
+            //                    Console.WriteLine($"{usrname} Terhapus.");
+            //                }
+            //            }
+            //            break;
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("No user found.");
+            //}
             Console.ReadKey();
         }
         static void Login()
