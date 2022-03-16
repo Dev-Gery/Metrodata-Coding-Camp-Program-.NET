@@ -4,49 +4,44 @@ namespace Authentication
 {
     internal class User
     {
-        private string firstName;
-        private string lastName;
-        private string userName;
-        private string password;
+        private string FirstName;
+        private string LastName;
+        private string UserName;
+        private string Password;
         public User(string fname, string lname, string username, string password)
         {
-            this.firstName = fname;
-            this.lastName = lname;
-            this.userName = username;
-            this.password = password;
+            FirstName = fname;
+            LastName = lname;
+            UserName = username;
+            Password = password;
         }
-
-        public string getFirstName()
+        public string GetFirstName()
         {
-            return firstName;
+            return FirstName;
         }
-        public string getLastName()
+        public string GetLastName()
         {
-            return lastName;
+            return LastName;
         }
-        public string getUserName()
+        public string GetUserName()
         {
-            return userName;
+            return UserName;
         }
-        public string getPassword()
+        public string GetPassword()
         {
-            return password;
+            return Password;
         }
-        public void setFirstName(string fname)
+        public void SetLastName(string lname)
         {
-            this.firstName = fname;
+            LastName = lname;
         }
-        public void setLastName(string lname)
+        public void SetUserName(string username)
         {
-            this.lastName = lname;
+            UserName = username;
         }
-        public void setUserName(string username)
+        public void SetPassword(string password)
         {
-            this.userName = username;
-        }
-        public void setPassword(string password)
-        {
-            this.password = password;
+            Password = password;
         }
     }
 }

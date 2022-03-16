@@ -12,11 +12,11 @@ namespace Authentication
             string userInput;
             do
             {
-                userInput = pemilihanMenu();
-                prosesInput(userInput);
+                userInput = PemilihanMenu();
+                ProsesInput(userInput);
             } while (userInput != "5");
         }
-        static string pemilihanMenu()
+        static string PemilihanMenu()
         {
             Console.WriteLine("**BASIC USER AUTHENTICATION**");
             Console.WriteLine("1. Create");
@@ -26,30 +26,40 @@ namespace Authentication
             Console.WriteLine("5. Exit");
             Console.Write("Input : "); return Console.ReadLine();
         }
-        static void prosesInput(string input)
+        static void ProsesInput(string input)
         {
-            if (input == "1")
+            switch (input)
             {
-                CreateUser();
-            }
-            else if (input == "2")
-            {
-                ShowUser();
-            }
-            else if (input == "3")
-            {
-                SearchOrRemove();
-            }
-            else if (input == "4")
-            {
-                Login();
-            }
-            else if (input == "5")
-            {
-                Exit();
-                return;
+                case "1":
+                    CreateUser();
+                    break;
+                case "2":
+                    ShowUser();
+                    break;
+                case "3":
+                    SearchOrRemove();
+                    break;
+                case "4":
+                    Login();
+                    break;
+                case "5":
+                    Exit();
+                    return;
             }
             Console.Clear();
+        }
+        static void PrintUserInfo(User user)
+        {
+            Console.WriteLine("==========================");
+            Console.Write("First Name: ");
+            Console.WriteLine(user.GetFirstName());
+            Console.Write("Last Name: ");
+            Console.WriteLine(user.GetLastName());
+            Console.Write("Username: ");
+            Console.WriteLine(user.GetUserName());
+            Console.Write("Password: ");
+            Console.WriteLine(user.GetPassword());
+            Console.WriteLine("==========================");
         }
         static void CreateUser()
         {
@@ -89,7 +99,7 @@ namespace Authentication
             int duplicate = 0;
             for (int i = 0; i < Accounts.Count; i++)
             {
-                if (Accounts[i].getUserName() == userName)
+                if (Accounts[i].GetUserName() == userName)
                 {
                     duplicate += 1;
                 }
@@ -125,50 +135,93 @@ namespace Authentication
         {
             Console.Clear();
             Console.WriteLine("==SHOW USER==");
+            if (Accounts.Count == 0)
+            {
+                Console.WriteLine("No user exists.\n(Press ENTER to go back)");
+                Console.Read();
+                return;
+            }
             for (int i = 0; i < Accounts.Count; i++)
             {
-                Console.WriteLine("==========================");
-                Console.Write("First Name: ");
-                Console.WriteLine(Accounts[i].getFirstName());
-                Console.Write("Last Name: ");
-                Console.WriteLine(Accounts[i].getLastName());
-                Console.Write("Username: ");
-                Console.WriteLine(Accounts[i].getUserName());
-                Console.Write("Password: ");
-                Console.WriteLine(Accounts[i].getPassword());
-                Console.WriteLine("==========================");
+                PrintUserInfo(Accounts[i]);
             }
             Console.ReadKey();
         }
         static void SearchOrRemove()
         {
-            string username, fname, lname, keyword, reference;
-            List<int> userIdx = new List<int>();
             Console.Clear();
             Console.WriteLine("==SEARCH/REMOVE_USER==");
+            if (Accounts.Count == 0)
+            {
+                Console.WriteLine("No user exists.\n(Press ENTER to go back)");
+                Console.Read();
+                return;
+            }
+            string keyword, reference;
+            List<int> userIdx = new List<int>();
             Console.Write("Enter keyword (ref. first name and last name): ");
             keyword = Console.ReadLine();
             for (int i = 0; i < Accounts.Count; i++)
             {
-                reference = Accounts[i].getFirstName() + Accounts[i].getLastName();
-                if (reference.ToLower().Contains(keyword))
+                reference = Accounts[i].GetFirstName() + Accounts[i].GetLastName();
+                if (reference.ToLower().Contains(keyword.ToLower()))
                 {
-                    Console.WriteLine("==========================");
-                    Console.Write("First Name: ");
-                    Console.WriteLine(Accounts[i].getFirstName());
-                    Console.Write("Last Name: ");
-                    Console.WriteLine(Accounts[i].getLastName());
-                    Console.Write("Username: ");
-                    Console.WriteLine(Accounts[i].getUserName());
-                    Console.Write("Password: ");
-                    Console.WriteLine(Accounts[i].getPassword());
-                    Console.WriteLine("==========================");
+                    userIdx.Add(i);
                 }
+            }
+            int foundCount = userIdx.Count;
+            if (foundCount > 0)
+            {
+                string ans, usrname;
+                switch (foundCount)
+                {
+                    case 1:
+                        User choosen = Accounts[userIdx[0]];
+                        PrintUserInfo(choosen);
+                        usrname = choosen.GetUserName();
+                        Console.WriteLine($"Apakah anda ingin menghapus {usrname}? (Y/y)Ya / (T/t)Tidak");
+                        ans = Console.ReadLine();
+                        if (ans.ToLower() == "y")
+                        {
+                            Accounts.Remove(choosen);
+                            Console.WriteLine($"{usrname} Terhapus.");
+                        }
+                        break;
+                    case int n when (n > 1):
+                        for (int i = 0; i < userIdx.Count; i++)
+                        {
+                            Console.WriteLine($"({i + 1})");
+                            PrintUserInfo(Accounts[userIdx[i]]);
+                        }
+                        Console.WriteLine("Apakah anda ingin menghapus salah satu data? (Y)Ya / (T)Tidak");
+                        ans = Console.ReadLine();
+                        if (ans.ToLower().Contains("y"))
+                        {
+                            Console.Write("Pilih nomor dari daftar yang ingin dihapus: ");
+                            int choiceNum = int.Parse(Console.ReadLine());
+                            choosen = Accounts[userIdx[choiceNum - 1]];
+                            PrintUserInfo(choosen);
+                            usrname = choosen.GetUserName();
+                            Console.WriteLine($"Apakah anda ingin menghapus {usrname}? (Y/y)Ya / (T/y)Tidak");
+                            ans = Console.ReadLine();
+                            if (ans.ToLower() == "y")
+                            {
+                                Accounts.Remove(choosen);
+                                Console.WriteLine($"{usrname} Terhapus.");
+                            }
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("No user found.");
             }
             Console.ReadKey();
         }
         static void Login()
         {
+            Console.WriteLine("==LOGIN_USER==");
             Console.Clear();
             if (Accounts.Count == 0)
             {
@@ -177,7 +230,7 @@ namespace Authentication
                 return;
             }
             string username, password;
-            Console.WriteLine("==LOGIN_USER==");
+            int userIdx = -1;
             Console.WriteLine("(Enter 'x' to return to main menu)");
             Boolean usernameFound = false;
             do
@@ -186,9 +239,10 @@ namespace Authentication
                 username = Console.ReadLine();
                 for (int i = 0; i < Accounts.Count; i++)
                 {
-                    if (Accounts[i].getUserName() == username)
+                    if (Accounts[i].GetUserName() == username)
                     {
                         usernameFound = true;
+                        userIdx = i;
                         break;
                     }
                 }
@@ -207,18 +261,14 @@ namespace Authentication
             {
                 Console.Write("Enter password: ");
                 password = Console.ReadLine();
-                for (int i = 0; i < Accounts.Count; i++)
+                if (BCrypt.Net.BCrypt.Verify(password, Accounts[userIdx].GetPassword()))
                 {
-                    if (BCrypt.Net.BCrypt.Verify(password, Accounts[i].getPassword()))
-                    {
-                        passwordMatch = true;
-                    }
+                    passwordMatch = true;
                 }
-                if (password.ToLower() == "x")
+                else if (password.ToLower() == "x")
                 {
                     Console.Clear();
                     return;
-
                 }
                 else if (!passwordMatch)
                 {
@@ -231,7 +281,6 @@ namespace Authentication
         static void Exit()
         {
             Console.WriteLine("Selamat Tinggal.");
-            return;
         }
     }
 }
