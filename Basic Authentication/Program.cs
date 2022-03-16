@@ -230,7 +230,7 @@ namespace Authentication
                 return;
             }
             string username, password;
-            int userIdx = -1;
+            User loginTarget = null;
             Console.WriteLine("(Enter 'x' to return to main menu)");
             Boolean usernameFound = false;
             do
@@ -242,7 +242,7 @@ namespace Authentication
                     if (Accounts[i].GetUserName() == username)
                     {
                         usernameFound = true;
-                        userIdx = i;
+                        loginTarget = Accounts[i];
                         break;
                     }
                 }
@@ -261,7 +261,7 @@ namespace Authentication
             {
                 Console.Write("Enter password: ");
                 password = Console.ReadLine();
-                if (BCrypt.Net.BCrypt.Verify(password, Accounts[userIdx].GetPassword()))
+                if (BCrypt.Net.BCrypt.Verify(password, loginTarget.GetPassword()))
                 {
                     passwordMatch = true;
                 }
