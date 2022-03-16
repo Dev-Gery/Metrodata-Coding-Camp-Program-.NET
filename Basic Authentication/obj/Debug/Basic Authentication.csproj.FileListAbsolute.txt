@@ -1,0 +1,11 @@
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\bin\Debug\Basic Authentication.exe.config
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\bin\Debug\Basic Authentication.exe
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\bin\Debug\Basic Authentication.pdb
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\bin\Debug\BCrypt.Net-Core.dll
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\bin\Debug\BCrypt.Net-Core.pdb
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\obj\Debug\Basic Authentication.csproj.AssemblyReference.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\obj\Debug\Basic Authentication.csproj.SuggestedBindingRedirects.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\obj\Debug\Basic Authentication.csproj.CoreCompileInputs.cache
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\obj\Debug\Basic Authentication.csproj.CopyComplete
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\obj\Debug\Basic Authentication.exe
+C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Basic Authentication\obj\Debug\Basic Authentication.pdb
