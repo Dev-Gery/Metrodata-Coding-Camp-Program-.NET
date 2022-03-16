@@ -77,13 +77,13 @@ namespace Authentication
                     Console.Clear();
                     return;
                 }
-                else if (firstName.Length < 2)
-                {
-                    Console.WriteLine("Tidak boleh kurang dari dua huruf");
-                }
                 else if (firstName.Contains(" "))
                 {
                     Console.WriteLine("Tidak boleh ada spasi.");
+                }
+                else if (firstName.Length < 2)
+                {
+                    Console.WriteLine("Tidak boleh kurang dari dua huruf");
                 }
             } while (firstName.Contains(" ") || firstName.Length < 2);
             do
@@ -95,13 +95,13 @@ namespace Authentication
                     Console.Clear();
                     return;
                 }
-                else if (lastName.Length < 2)
-                {
-                    Console.WriteLine("Tidak boleh kurang dari dua huruf");
-                }
                 else if (lastName.Contains(" "))
                 {
                     Console.WriteLine("Tidak boleh ada spasi.");
+                }
+                else if (lastName.Length < 2)
+                {
+                    Console.WriteLine("Tidak boleh kurang dari dua huruf");
                 }
             } while (lastName.Contains(" ") || lastName.Length < 2);
             Console.Write("Username: ");
