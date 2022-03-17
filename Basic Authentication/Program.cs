@@ -67,7 +67,7 @@ namespace Authentication
             Boolean validPassword;
             Console.Clear();
             Console.WriteLine("==CREATE USER==");
-            Console.WriteLine("(Enter a single 'x' first name/last name to return to main menu)");
+            Console.WriteLine("(Enter a single 'x' to cancel and return to main menu)");
             do
             {
                 Console.Write("First Name: ");
@@ -134,10 +134,15 @@ namespace Authentication
                                 && Regex.IsMatch(password, patternB)
                                 && Regex.IsMatch(password, patternC)
                                 && Regex.IsMatch(password, patternD);
-                if (!validPassword)
+                if (password.Replace(" ", "").ToLower() == "x")
+                {
+                    return;
+                }
+                else if (!validPassword)
                 {
                     Console.WriteLine("Error: password tidak valid.");
                 }
+
             } while (!validPassword);
             string hashPassword = BCrypt.Net.BCrypt.HashPassword(password);
             Accounts.Add(new User(firstName, lastName, userName, hashPassword));
@@ -242,7 +247,7 @@ namespace Authentication
             }
             string username, password;
             User loginTarget = null;
-            Console.WriteLine("(Enter 'x' to return to main menu)");
+            Console.WriteLine("(Enter a single 'x' to return to main menu)");
             Boolean usernameFound = false;
             do
             {
@@ -257,14 +262,18 @@ namespace Authentication
                         break;
                     }
                 }
-                if (username.ToLower() == "x")
+                if (username.Replace(" ", "").ToLower() == "x")
                 {
                     Console.Clear();
                     return;
                 }
+                else if (username.Contains(" "))
+                {
+                    Console.WriteLine("Username tidak boleh mengandung spasi.");
+                }
                 else if (!usernameFound)
                 {
-                    Console.WriteLine("username doesn't exist.");
+                    Console.WriteLine($"{username} doesn't exist.");
                 }
             } while (!usernameFound);
             Boolean passwordMatch = false;
@@ -272,14 +281,19 @@ namespace Authentication
             {
                 Console.Write("Enter password: ");
                 password = Console.ReadLine();
-                if (BCrypt.Net.BCrypt.Verify(password, loginTarget.GetPassword()))
-                {
-                    passwordMatch = true;
-                }
-                else if (password.ToLower() == "x")
+                if (password.Replace(" ", "").ToLower() == "x")
                 {
                     Console.Clear();
                     return;
+                }
+                else if (password.Contains(" "))
+                {
+                    Console.WriteLine("Password tidak boleh mengandung spasi.");
+                }
+                else if (BCrypt.Net.BCrypt.Verify(password, loginTarget.GetPassword()))
+                {
+                    passwordMatch = true;
+                    break;
                 }
                 else if (!passwordMatch)
                 {
