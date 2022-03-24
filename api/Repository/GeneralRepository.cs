@@ -25,7 +25,14 @@ namespace API.Repository
             var result = myContext.SaveChanges();
             return result;
         }
-
+        public int DeleteAll()
+        {
+            foreach (Entity entity in entities)
+            {
+                myContext.Remove(entity);
+            }
+            return myContext.SaveChanges();
+        }
         public IEnumerable<Entity> Get()
         {
             return entities.ToList();

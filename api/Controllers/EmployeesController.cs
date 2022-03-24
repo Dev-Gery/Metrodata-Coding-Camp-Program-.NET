@@ -100,7 +100,7 @@ namespace API.Controllers
             }  
         }
         [HttpDelete]
-        public ActionResult DeleteAll(string NIK)
+        public ActionResult DeleteAll()
         {
             try
             {

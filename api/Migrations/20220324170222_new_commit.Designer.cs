@@ -10,7 +10,7 @@ using api.Context;
 namespace API.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220323140922_new_commit")]
+    [Migration("20220324170222_new_commit")]
     partial class new_commit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,8 +24,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Model.Account", b =>
                 {
                     b.Property<string>("NIK")
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -51,12 +50,12 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UniversityId")
+                    b.Property<int>("University_Id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniversityId");
+                    b.HasIndex("University_Id");
 
                     b.ToTable("EDUCATION");
                 });
@@ -64,15 +63,14 @@ namespace API.Migrations
             modelBuilder.Entity("API.Model.Profiling", b =>
                 {
                     b.Property<string>("NIK")
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("EducationId")
+                    b.Property<int>("Education_Id")
                         .HasColumnType("int");
 
                     b.HasKey("NIK");
 
-                    b.HasIndex("EducationId");
+                    b.HasIndex("Education_Id");
 
                     b.ToTable("PROFILING");
                 });
@@ -96,8 +94,7 @@ namespace API.Migrations
             modelBuilder.Entity("api.Model.Employee", b =>
                 {
                     b.Property<string>("NIK")
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -110,8 +107,9 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -140,15 +138,19 @@ namespace API.Migrations
             modelBuilder.Entity("API.Model.Education", b =>
                 {
                     b.HasOne("API.Model.University", "University")
-                        .WithMany("Education")
-                        .HasForeignKey("UniversityId");
+                        .WithMany("Educations")
+                        .HasForeignKey("University_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("API.Model.Profiling", b =>
                 {
                     b.HasOne("API.Model.Education", "Education")
-                        .WithMany("Profiling")
-                        .HasForeignKey("EducationId");
+                        .WithMany("Profilings")
+                        .HasForeignKey("Education_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Model.Account", "Account")
                         .WithOne("Profiling")

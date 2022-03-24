@@ -10,5 +10,6 @@ namespace API.Repository.Interface
         int Update(Entity entity, Key key);
         int Update(Entity entity);
         int Delete(Key key);
+        int DeleteAll();
     } 
 }

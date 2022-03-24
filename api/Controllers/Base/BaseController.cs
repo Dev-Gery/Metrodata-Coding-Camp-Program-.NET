@@ -26,7 +26,7 @@ namespace API.Controllers.Base
                 var result = repository.Get();
                 if (result.Count() > 0)
                 {
-                    var response = new { Status = HttpStatusCode.OK, result, message = "Data ditemukan." };
+                    var response = new { Status = HttpStatusCode.OK, result, message = "Beberapa data ditemukan." };
                     return Ok(response);
                 }
                 else
@@ -41,6 +41,7 @@ namespace API.Controllers.Base
                 return StatusCode(500, response);
             }
         }
+
         [HttpGet("{key}")]
         public ActionResult<Entity> Get(Key key)
         {
@@ -63,6 +64,7 @@ namespace API.Controllers.Base
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
+
         [HttpPost]
         public ActionResult<Entity> Post(Entity entity)
         {
@@ -76,6 +78,7 @@ namespace API.Controllers.Base
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
+
         [HttpPut]
         public ActionResult<Entity> Put(Entity entity)
         {
@@ -90,6 +93,7 @@ namespace API.Controllers.Base
                 return BadRequest(new { status = HttpStatusCode.BadRequest, message = ex.Message });
             }
         }
+
         [HttpDelete("{key}")]
         public ActionResult<Entity> Delete(Key key)
         {
@@ -103,6 +107,22 @@ namespace API.Controllers.Base
             {
                 var result = repository.Get(key);
                 return BadRequest(new { status = HttpStatusCode.BadRequest, result, message = "Data tidak ditemukan atau terjadi kesalahan" });
+            }
+        }
+
+        [HttpDelete]
+        public ActionResult<Entity> DeleteAll()
+        {
+            try
+            {
+                var result = repository.Get();
+                repository.DeleteAll();
+                return Ok(new { Status = 200, result, message = "Data-data yang muncul di hasil telah terhapus" });
+            }
+            catch (Exception)
+            {
+                var result = repository.Get();
+                return BadRequest(new { status = HttpStatusCode.BadRequest, result, message = "Tidak ada data yang ditemukan atau terjadi kesalahan" });
             }
         }
     }

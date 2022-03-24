@@ -10,6 +10,6 @@ namespace API.Model
     {
         [Key] public int Id { get; set; }
         [Required] public string Name { get; set; }
-        public virtual ICollection<Education> Education { get; set; }
+        public virtual ICollection<Education> Educations { get; set; }
     }
 }

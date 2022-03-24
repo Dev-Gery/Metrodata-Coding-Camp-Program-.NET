@@ -7,8 +7,9 @@ namespace API.Model
     [Table("PROFILING")]
     public class Profiling
     {
-        [Key, MaxLength(15)] public string NIK { get; set; }
+        [Key] public string NIK { get; set; }
+        public int Education_Id { get; set; }
         public Education Education { get; set; }
-        public virtual Account Account { get; set; }
+        public Account Account { get; set; }
     }
 }

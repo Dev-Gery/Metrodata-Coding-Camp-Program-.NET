@@ -7,38 +7,46 @@ namespace api.Context
     public class MyContext : DbContext
     {
         internal readonly object entities;
-
-        public MyContext(DbContextOptions<MyContext> option) : base(option)
-        {
-
-        }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Profiling> Profilings { get; set; }
         public DbSet<Education> Educations { get; set; }
         public DbSet<University> Universities { get; set; }
-
+        public MyContext(DbContextOptions<MyContext> option) : base(option)
+        {
+            entities = new { Employees, Accounts, Profilings, Educations, Universities };
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
-                .HasOne(eye => eye.Account)
+                .HasOne<Account>(eye => eye.Account)
                 .WithOne(act => act.Employee)
                 .HasForeignKey<Account>(act => act.NIK)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Account>()
-                .HasOne(act => act.Profiling)
+                .HasOne<Profiling>(act => act.Profiling)
                 .WithOne(plg => plg.Account)
                 .HasForeignKey<Profiling>(plg => plg.NIK)
-                .IsRequired();
-
+                .OnDelete(DeleteBehavior.Cascade);
+                
+ 
             modelBuilder.Entity<Profiling>()
-                .HasOne(plg => plg.Education)
-                .WithMany(edu => edu.Profiling);
+                .HasOne<Education>(plg => plg.Education)
+                .WithMany(edu => edu.Profilings)
+                .HasForeignKey(plg => plg.Education_Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Education>()
-                .HasOne(edu => edu.University)
-                .WithMany(uni => uni.Education);
+                .HasOne<University>(edu => edu.University)
+                .WithMany(uni => uni.Educations)
+                .HasForeignKey(edu => edu.University_Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Employee>()
+                .Property(g => g.Gender)
+                .HasConversion<string>();
         }
     }
 }

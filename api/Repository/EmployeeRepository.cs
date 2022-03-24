@@ -10,38 +10,13 @@ namespace API.Repository.Interface
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly MyContext context;
-        private static List<string> AutoNIK;
         public EmployeeRepository(MyContext context)
         {
             this.context = context;
-            InitAutoNIK();
-        } 
-       
-        public void InitAutoNIK()
-        {
-            string autoNIKPattern = DateTime.Now.ToString("yyyy") + "00";
-            string x = $@"^{autoNIKPattern}";
-            AutoNIK = new List<string> { $"{autoNIKPattern}0" };
-            int i = 0;
-            foreach (Employee eye in context.Employees)
-            {
-                if (Regex.IsMatch(eye.NIK, x))
-                {
-                    if (int.Parse(eye.NIK) > int.Parse(AutoNIK[i]))
-                    {
-                        AutoNIK.Add(eye.NIK);
-                        i++;
-                    }
-                }     
-            }
         } 
         public int Insert(Employee employee)
         { 
-            if (string.IsNullOrWhiteSpace(employee.NIK))
-            { 
-                employee.NIK = (int.Parse(AutoNIK.Last()) + 1).ToString();
-            }
-            else if (Regex.IsMatch(Regex.Replace(employee.NIK, "\\s", ""), "[0-9]"))
+            if (Regex.IsMatch(Regex.Replace(employee.NIK, "\\s", ""), "[0-9]"))
             {
                 employee.NIK = Regex.Replace(employee.NIK, "\\s", "");
             }
@@ -101,7 +76,6 @@ namespace API.Repository.Interface
         {
             return context.Employees.FirstOrDefault(x => x.FirstName == FirstName);
         }
-       
         public int Update(Employee employee)
         {
             context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
