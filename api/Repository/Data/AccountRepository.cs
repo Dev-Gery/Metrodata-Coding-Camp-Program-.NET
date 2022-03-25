@@ -21,25 +21,27 @@ namespace API.Repository.Data
         }
         public void InitAutoNIK()
         {
-            string autoNIKPattern = DateTime.Now.ToString("yyyy") + "00";
-            string x = $@"^{autoNIKPattern}";
-            AutoNIK = new List<string> { $"{autoNIKPattern}0" };
-            int i = 0;
-            foreach (Employee eye in myContext.Employees)
+            string autoNIKPattern = DateTime.Now.Year.ToString();
+            autoNIKPattern = $@"^{autoNIKPattern}";
+            AutoNIK = new List<string> { $"{autoNIKPattern}000" };
+            foreach (Employee eye in myContext.Employees.ToArray())
             {
-                if (Regex.IsMatch(eye.NIK, x))
+                if (Regex.IsMatch(eye.NIK, autoNIKPattern))
                 {
-                    if (int.Parse(eye.NIK) > int.Parse(AutoNIK[i]))
-                    {
-                        AutoNIK.Add(eye.NIK);
-                        i++;
-                    }
+                    AutoNIK.Add(eye.NIK);
+                }
+                else
+                {
+                    continue;
                 }
             }
+            AutoNIK.Sort();
         }
         public string GetLastAutoNIK()
         {
-            return (int.Parse(AutoNIK.Last()) + 1).ToString();
+            string lastNIK = AutoNIK.Last();
+            int increment = Int32.Parse(lastNIK.Substring(lastNIK.Length - 1)) + 1;
+            return lastNIK.Substring(0, lastNIK.Length - 1) + increment.ToString();
         }
         public enum DataCheckConstants
         {
@@ -96,6 +98,7 @@ namespace API.Repository.Data
                 return duplicateCheck;
             };
             myContext.Employees.Add(eye);
+            myContext.SaveChanges();
 
             var act = new Account
             {
@@ -103,6 +106,7 @@ namespace API.Repository.Data
                 Password = registerVM.Password
             };
             myContext.Accounts.Add(act);
+            myContext.SaveChanges();
 
             var etn = new Education
             {
@@ -159,7 +163,7 @@ namespace API.Repository.Data
             Profiling plg = myContext.Profilings.Find(NIK);
             Education edu = myContext.Educations.Find(plg.Education_Id);
             University uty = myContext.Universities.Find(edu.University_Id);
-            var masterData = new MasterEyeDataVM
+            MasterEyeDataVM masterData = new MasterEyeDataVM
             {
                 NIK = eye.NIK,
                 FullName = eye.FirstName + " " + eye.LastName,

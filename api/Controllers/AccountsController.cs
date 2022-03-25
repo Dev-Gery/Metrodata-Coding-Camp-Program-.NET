@@ -25,13 +25,16 @@ namespace API.Controllers
         {
             try
             {
-                register.NIK = accountRepository.GetLastAutoNIK();
+                if (string.IsNullOrWhiteSpace(register.NIK))
+                {
+                    register.NIK = accountRepository.GetLastAutoNIK();
+                }
                 DataCheckConstants registration = accountRepository.Register(register);
-                var result = accountRepository.GetMasterData(register.NIK);
                 Object response;
                 if (registration == DataCheckConstants.ValidData)
                 {
-                    response = new { Status = 200, Result = result, Message = "Data berhasil dimasukkan" };
+                    var result = accountRepository.GetMasterData(register.NIK);
+                    response = new { Status = 200, Result = result,  Message = "Data berhasil dimasukkan" };
                 }
                 else if (registration == DataCheckConstants.EmailExists)
                 {
