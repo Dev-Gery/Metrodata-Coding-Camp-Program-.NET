@@ -54,6 +54,12 @@ namespace API.Repository
             var result = myContext.SaveChanges();
             return result;
         }
+        public Key GetKey(Entity entity)
+        {
+            var keyName = myContext.Model.FindEntityType(typeof(Entity)).FindPrimaryKey().Properties
+                .Select(x => x.Name).Single();
+            return (Key)entity.GetType().GetProperty(keyName).GetValue(entity, null);
+        }
         public int Update(Entity entity, Key key)
         {
             throw new System.NotImplementedException();

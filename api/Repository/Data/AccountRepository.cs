@@ -1,83 +1,45 @@
 ﻿using api.Context;
 using api.Model;
 using API.Model;
+using API.Repository;
 using API.Model.ViewModel;
 using API.Repository.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using static API.Repository.Interface.EmployeeRepository;
 
 namespace API.Repository.Data
 {
     public class AccountRepository : GeneralRepository<MyContext, Account, string>
     {
         private readonly MyContext myContext;
-        private static List<string> AutoNIK;
+
         public AccountRepository(MyContext myContext) : base(myContext)
         {
             this.myContext = myContext;
-            InitAutoNIK();
         }
-        public void InitAutoNIK()
+        public new DataCheckConstants Insert(Account account)
         {
-            string autoNIKPattern = DateTime.Now.Year.ToString();
-            autoNIKPattern = $@"^{autoNIKPattern}";
-            AutoNIK = new List<string> { $"{autoNIKPattern}000" };
-            foreach (Employee eye in myContext.Employees.ToArray())
+            if (string.IsNullOrEmpty(account.NIK))
             {
-                if (Regex.IsMatch(eye.NIK, autoNIKPattern))
-                {
-                    AutoNIK.Add(eye.NIK);
-                }
-                else
-                {
-                    continue;
-                }
+                return DataCheckConstants.NonNumericNIK;
             }
-            AutoNIK.Sort();
-        }
-        public string GetLastAutoNIK()
-        {
-            string lastNIK = AutoNIK.Last();
-            int increment = Int32.Parse(lastNIK.Substring(lastNIK.Length - 1)) + 1;
-            return lastNIK.Substring(0, lastNIK.Length - 1) + increment.ToString();
-        }
-        public enum DataCheckConstants
-        {
-            EmailExists, PhoneExists, EmailPhoneExist, ValidData
-        }
-        private DataCheckConstants DuplicateDataCheck(Employee eye)
-        {
-            Boolean emailDuplicate = false, phoneDuplicate = false;
-            var emp = myContext.Employees.SingleOrDefault(x => x.Email.ToLower() == eye.Email.ToLower());
-            if (emp != null)
+            var emp = myContext.Employees.SingleOrDefault(x => x.NIK == account.NIK);
+            if (emp == null)
             {
-                emailDuplicate = true;
+                return DataCheckConstants.NIKNotExists;
             }
-
-            emp = myContext.Employees.SingleOrDefault(x => x.Phone == eye.Phone);
-            if (emp != null)
+            var acc = myContext.Accounts.SingleOrDefault(x => x.NIK == account.NIK);
+            if (acc != null)
             {
-                phoneDuplicate = true;
+                return DataCheckConstants.NIKExists;
             }
-
-            if (emailDuplicate && phoneDuplicate)
-            {
-                return DataCheckConstants.EmailPhoneExist;
-            }
-            else if (phoneDuplicate)
-            {
-                return DataCheckConstants.PhoneExists;
-            }
-            else if (emailDuplicate)
-            {
-                return DataCheckConstants.EmailExists;
-            }
-            else
-            {
-                return DataCheckConstants.ValidData;
-            }
+            account.Password = Hashing.GenerateHashPassword(account.Password);
+            myContext.Accounts.Add(account);
+            myContext.SaveChanges();
+            return DataCheckConstants.ValidData;
         }
         public DataCheckConstants Register(RegisterVM registerVM)
         {
@@ -92,10 +54,10 @@ namespace API.Repository.Data
                 Salary = registerVM.Salary,
                 Gender = registerVM.Gender
             };
-            var duplicateCheck = DuplicateDataCheck(eye);
-            if (duplicateCheck != DataCheckConstants.ValidData)
+            var dataCheck = EyeDataCheck(myContext, eye);
+            if (dataCheck != DataCheckConstants.ValidData)
             {
-                return duplicateCheck;
+                return dataCheck;
             };
             myContext.Employees.Add(eye);
             myContext.SaveChanges();
@@ -103,7 +65,7 @@ namespace API.Repository.Data
             var act = new Account
             {
                 NIK = eye.NIK,
-                Password = registerVM.Password
+                Password = Hashing.GenerateHashPassword(registerVM.Password)
             };
             myContext.Accounts.Add(act);
             myContext.SaveChanges();
@@ -148,7 +110,8 @@ namespace API.Repository.Data
                 return LoginCheckConstants.InexistentAccount;
             }
 
-            if (act.Password == loginVM.Password)
+            bool PasswordMatch  = Hashing.ValidatePassword(loginVM.Password, act.Password);
+            if (PasswordMatch)
             {
                 return LoginCheckConstants.LoginSuccess;
             }

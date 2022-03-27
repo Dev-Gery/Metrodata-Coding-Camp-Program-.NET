@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 using static API.Repository.Data.AccountRepository;
+using static API.Repository.Interface.EmployeeRepository;
 
 namespace API.Controllers
 {
@@ -15,40 +16,72 @@ namespace API.Controllers
     public class AccountsController : BaseController<Account, AccountRepository, string>
     {
         private readonly AccountRepository accountRepository;
+        
         public AccountsController(AccountRepository accountRepository) : base(accountRepository)
         {
             this.accountRepository = accountRepository;
         }
+        [HttpPost("account")]
+        public new ActionResult Post(Account account)
+        {
+            try
+            {
+                DataCheckConstants data = accountRepository.Insert(account);
+                if (data == DataCheckConstants.ValidData)
+                {
+                    return Ok(new { Status = 200, Message = $"Akun karyawan dengan NIK {account.NIK} berhasil dibuat" });
+                }
+                else if (data == DataCheckConstants.NIKNotExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "Karyawan dengan NIK ini tidak ada" });
+                }
+                else if (data == DataCheckConstants.NIKExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "Akun dengan NIK ini sudah ada" });
+                }
+                else
+                {
+                    return BadRequest(new { Status = 400, Message = "Input NIK tidak ada atau tidak valid" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+           
 
+        }
         [HttpPost("register")]
         public ActionResult RegisterUp(RegisterVM register)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(register.NIK))
-                {
-                    register.NIK = accountRepository.GetLastAutoNIK();
-                }
                 DataCheckConstants registration = accountRepository.Register(register);
-                Object response;
                 if (registration == DataCheckConstants.ValidData)
                 {
                     var result = accountRepository.GetMasterData(register.NIK);
-                    response = new { Status = 200, Result = result,  Message = "Data berhasil dimasukkan" };
+                    return Ok(new { Status = 200, Result = result,  Message = "Data berhasil dimasukkan" });
+                }
+                else if (registration == DataCheckConstants.NIKExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "NIK hanya boleh mengandung karakter numerik" });
+                }
+                else if (registration == DataCheckConstants.NIKExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "NIK sudah ada" });
                 }
                 else if (registration == DataCheckConstants.EmailExists)
                 {
-                    response = new { Status = 400, Message = "Email sudah ada" };
+                    return BadRequest(new { Status = 400, Message = "Email sudah ada" });
                 }
                 else if (registration == DataCheckConstants.PhoneExists)
                 {
-                    response = new { Status = 400, Message = "Phone sudah ada" };
+                    return BadRequest(new { Status = 400, Message = "Phone sudah ada" });
                 }
                 else
                 {
-                    response = new { Status = 400, Message = "Email dan Phone sudah ada" };
+                    return BadRequest(new { Status = 400, Message = "Email dan Phone sudah ada" });
                 }
-                return Ok(response);
             }
             catch (Exception ex)
             {

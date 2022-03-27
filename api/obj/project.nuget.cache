@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "IYnrJDAE/rynMkM+cN3eB3RPdNmXpxIQeotQscfsuLS+IgHh8XBAa9sAnKcr9/GvCXgAVwJj8KoLa9a+8zmxkg==",
+  "dgSpecHash": "2dqKOIlSG2v/U4OcWHF4rZ2h9+c96vo9tl1isUbIfLtl74IuZR/JrIDQxfp06sRIXJnvcdqV9ls7Y36NbUErvA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Nayn\\OneDrive\\Documents\\GitHub\\Metrodata-Coding-Camp-Program-.NET\\api\\API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Nayn\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\3.0.0\\microsoft.aspnetcore.jsonpatch.3.0.0.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\3.0.0\\microsoft.aspnetcore.mvc.newtonsoftjson.3.0.0.nupkg.sha512",

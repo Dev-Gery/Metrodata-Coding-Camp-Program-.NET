@@ -1,129 +1,65 @@
-﻿using api.Model;
+﻿using api.Context;
+using api.Model;
+using API.Controllers.Base;
 using API.Repository.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using static API.Repository.Interface.EmployeeRepository;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class EmployeesController : BaseController<Employee, EmployeeRepository, string>
     {
         private readonly EmployeeRepository employeeRepository;
-        public EmployeesController(EmployeeRepository employeeRepository)
+        public EmployeesController(EmployeeRepository employeeRepository) : base(employeeRepository)
         {
             this.employeeRepository = employeeRepository;
         }
-        [HttpGet]
-        public ActionResult Get()
+        [HttpPost("employee")]
+        public new ActionResult Post(Employee employee)
         {
             try
             {
-                var result = employeeRepository.Get();
-                if (result.Count() > 0)
+                DataCheckConstants data = employeeRepository.Insert(employee);
+                if (data == DataCheckConstants.ValidData)
                 {
-                    var response = new { Status = HttpStatusCode.OK, result, message = "Data ditemukan." };
-                    return Ok(response);
+                    var result = employeeRepository.Get(employee.NIK);
+                    return Ok(new { Status = 200, Result = result, Message = "Data berhasil dimasukkan" });
+                }
+                else if (data == DataCheckConstants.NonNumericNIK)
+                {
+                    return BadRequest(new { Status = 400, Message = "NIK hanya boleh mengandung karakter numerik" });
+                }
+                else if (data == DataCheckConstants.NIKExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "NIK sudah ada" });
+                }
+                else if (data == DataCheckConstants.EmailExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "Email sudah ada" });
+                }
+                else if (data == DataCheckConstants.PhoneExists)
+                {
+                    return BadRequest(new { Status = 400, Message = "Phone sudah ada" });
                 }
                 else
                 {
-                    var response = new { Status = HttpStatusCode.NotFound, result, message = "Data tidak ditemukan." };
-                    return NotFound(response);
+                    return BadRequest(new { Status = 400, Message = "Email dan Phone sudah ada" });
                 }
-            }
-            catch (Exception ex)
-            {
-                var response = new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message };
-                return StatusCode(500, response);
-            }
-        }
-        [HttpGet("{NIK}")]
-        public ActionResult Get(string NIK)
-        {
-            try
-            {
-                NIK = NIK.Trim();
-                var result = employeeRepository.GetNIK(NIK);
-                if (string.IsNullOrEmpty(NIK) || NIK.Contains(" "))
-                {
-                    var response = new { Status = HttpStatusCode.BadRequest, result, Message = "Input NIK tidak boleh kosong atau mengandung spasi atau whitespace apapun." };
-                    return BadRequest(response);
-                }
-                else if (employeeRepository.GetNIK(NIK) == null)
-                {
-                    var response = new { Status = HttpStatusCode.NotFound, result, Message = "Data tidak ditemukan." };
-                    return NotFound(response);
-                }
-                else
-                {
-                    var response = new { Status = 200, result, Message = "Data ditemukan." };
-                    return Ok(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-            }  
-        }
-        //[HttpGet("{FirstName}")]
-        //public ActionResult GetFName(string FirstName)
-        //{
-        //    return Ok(employeeRepository.GetFirstName(FirstName));
-        //}
-        [HttpPost]
-        public ActionResult Post(Employee employee)
-        {
-            try
-            {
-                employeeRepository.Insert(employee);
-                return this.Get(employee.NIK);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
-        [HttpPut]
-        public ActionResult Put(Employee employee)
+        [HttpGet("firstname/{FirstName}")]
+        public ActionResult GetFName(string FirstName)
         {
-            try
-            {
-                employeeRepository.Update(employee);
-                return this.Get(employee.NIK);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { status = HttpStatusCode.BadRequest, message = ex.Message });
-            }  
-        }
-        [HttpDelete]
-        public ActionResult DeleteAll()
-        {
-            try
-            {
-                employeeRepository.DeleteAll();
-                return Ok(new { Status = 200, result = employeeRepository.Get(), message = "Semua data terhapus" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { status = HttpStatusCode.BadRequest, message = ex.Message });
-            }
-        }
-        [HttpDelete("{NIK}")]
-        public ActionResult DeleteNIK(string NIK)
-        {
-            try {
-                employeeRepository.Delete(NIK.Trim());
-                return Ok(new {Status = 200, result = employeeRepository.Get(), message = "Data terhapus" });
-            }
-            catch (Exception)
-            {
-                var result = employeeRepository.GetNIK(NIK);
-                return BadRequest(new { status = HttpStatusCode.BadRequest, result, message = "Data tidak ditemukan" });
-            }
+            return Ok(employeeRepository.GetFirstName(FirstName));
         }
     }
 }

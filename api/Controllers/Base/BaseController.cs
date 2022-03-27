@@ -26,12 +26,12 @@ namespace API.Controllers.Base
                 var result = repository.Get();
                 if (result.Count() > 0)
                 {
-                    var response = new { Status = HttpStatusCode.OK, result, message = "Beberapa data ditemukan." };
+                    var response = new { Status = HttpStatusCode.OK, result, message = "Beberapa data ditemukan" };
                     return Ok(response);
                 }
                 else
                 {
-                    var response = new { Status = HttpStatusCode.NotFound, result, message = "Data tidak ditemukan." };
+                    var response = new { Status = HttpStatusCode.NotFound, result, message = "Data tidak ditemukan" };
                     return NotFound(response);
                 }
             }
@@ -71,22 +71,23 @@ namespace API.Controllers.Base
             try
             {
                 repository.Insert(entity);
-                return Get();
+                return Ok(new { Status = 200, Result = repository.Get(repository.GetKey(entity)), Message = "Data berhasil dimasukkan" });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
-
+        
         [HttpPut]
         public ActionResult<Entity> Put(Entity entity)
         {
             try
             {
                 repository.Update(entity);
-                return this.Get();
-                //return this.Get(entity.Key_Value);
+                var key = repository.GetKey(entity);
+                var result = repository.Get(key);
+                return Ok(new { Status = 200, Result = result, Message = "Data berhasil diubah" });
             }
             catch (Exception ex)
             {

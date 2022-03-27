@@ -1,4 +1,5 @@
 using api.Context;
+using API.Repository;
 using API.Repository.Data;
 using API.Repository.Interface;
 using Microsoft.AspNetCore.Builder;
@@ -37,8 +38,8 @@ namespace api
             Options.UseSqlServer(Configuration.GetConnectionString("API")));
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+           
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
