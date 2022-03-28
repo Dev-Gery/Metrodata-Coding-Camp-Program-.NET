@@ -2,13 +2,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace api.Model
 {
     [Table("EMPLOYEE")]
     public class Employee
     {
-        [Key] public string NIK { get; set; }
+        [Key, Required] public string NIK { get; set; }
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
         [Required] public string Email { get; set; }
@@ -16,7 +17,8 @@ namespace api.Model
         public DateTime BirthDate { get; set; }
         public int Salary { get; set; }
         public Gender Gender { get; set; }
-        public Account Account { get; set; }
+        [JsonIgnore]
+        public virtual Account Account { get; set; }
     }
     public enum Gender
     {

@@ -1,20 +1,13 @@
 using api.Context;
-using API.Repository;
 using API.Repository.Data;
 using API.Repository.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace api
 {
@@ -35,10 +28,9 @@ namespace api
             services.AddScoped<AccountRepository>();
             services.AddScoped<EducationRepository>();
             services.AddDbContext<MyContext>(Options =>
-            Options.UseSqlServer(Configuration.GetConnectionString("API")));
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                Options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("API")));
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
            
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

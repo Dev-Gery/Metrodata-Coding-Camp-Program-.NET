@@ -11,14 +11,14 @@ namespace API.Migrations
                 name: "EMPLOYEE",
                 columns: table => new
                 {
-                    NIK = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    Phone = table.Column<string>(nullable: true),
-                    BirthDate = table.Column<DateTime>(nullable: false),
-                    Salary = table.Column<int>(nullable: false),
-                    Gender = table.Column<string>(nullable: false)
+                    NIK = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Salary = table.Column<int>(type: "int", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,9 +29,9 @@ namespace API.Migrations
                 name: "UNIVERSITY",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,8 +42,11 @@ namespace API.Migrations
                 name: "ACCOUNT",
                 columns: table => new
                 {
-                    NIK = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false)
+                    NIK = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OTP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExpiredToken = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,11 +63,11 @@ namespace API.Migrations
                 name: "EDUCATION",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Degree = table.Column<string>(nullable: false),
-                    GPA = table.Column<string>(nullable: false),
-                    University_Id = table.Column<int>(nullable: false)
+                    Degree = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GPA = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    University_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,23 +84,23 @@ namespace API.Migrations
                 name: "PROFILING",
                 columns: table => new
                 {
-                    NIK = table.Column<string>(nullable: false),
-                    Education_Id = table.Column<int>(nullable: false)
+                    NIK = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Education_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PROFILING", x => x.NIK);
                     table.ForeignKey(
-                        name: "FK_PROFILING_EDUCATION_Education_Id",
-                        column: x => x.Education_Id,
-                        principalTable: "EDUCATION",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_PROFILING_ACCOUNT_NIK",
                         column: x => x.NIK,
                         principalTable: "ACCOUNT",
                         principalColumn: "NIK",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PROFILING_EDUCATION_Education_Id",
+                        column: x => x.Education_Id,
+                        principalTable: "EDUCATION",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -118,16 +121,16 @@ namespace API.Migrations
                 name: "PROFILING");
 
             migrationBuilder.DropTable(
-                name: "EDUCATION");
-
-            migrationBuilder.DropTable(
                 name: "ACCOUNT");
 
             migrationBuilder.DropTable(
-                name: "UNIVERSITY");
+                name: "EDUCATION");
 
             migrationBuilder.DropTable(
                 name: "EMPLOYEE");
+
+            migrationBuilder.DropTable(
+                name: "UNIVERSITY");
         }
     }
 }

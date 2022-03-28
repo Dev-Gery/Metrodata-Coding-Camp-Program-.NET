@@ -1,5 +1,7 @@
 ﻿using api.Context;
 using api.Model;
+using API.Model;
+using API.Model.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace API.Repository.Interface
     public class EmployeeRepository : GeneralRepository<MyContext, Employee, string>, IEmployeeRepository
     {
         private readonly MyContext myContext;
-        private static List<string> AutoNIK;
+        private static List<string> AutoNIK = new List<string>() { };
         public EmployeeRepository(MyContext context) : base(context)
         {
             myContext = context;
@@ -18,11 +20,11 @@ namespace API.Repository.Interface
         public static void InitAutoNIK(MyContext context)
         {
             string autoNIKPattern = DateTime.Now.Year.ToString();
-            autoNIKPattern = $@"^{autoNIKPattern}";
-            AutoNIK = new List<string> { $"{autoNIKPattern}000" };
+            string RegExPattern = $@"^{autoNIKPattern}";
+            AutoNIK.Add($"{autoNIKPattern}000");
             foreach (Employee eye in context.Employees.ToArray())
             {
-                if (Regex.IsMatch(eye.NIK, autoNIKPattern))
+                if (Regex.IsMatch(eye.NIK, RegExPattern))
                 {
                     AutoNIK.Add(eye.NIK);
                 }
@@ -33,7 +35,7 @@ namespace API.Repository.Interface
             }
             AutoNIK.Sort();
         }
-        public static string GetLastAutoNIK(MyContext context)
+        public static string GetNewAutoNIK(MyContext context)
         {
             InitAutoNIK(context);
             string lastNIK = AutoNIK.Last();
@@ -42,13 +44,14 @@ namespace API.Repository.Interface
         }
         public enum DataCheckConstants
         {
-            NIKExists, NIKNotExists, NonNumericNIK, EmailExists, PhoneExists, EmailPhoneExist, ValidData
+            NIKExists, NIKNotExists, NonNumericNIK, EmailExists, EmailNotExists, PhoneExists,
+            EmailPhoneExist, ValidData, WrongOTP, InconsistentNewPassword, OTPIsUsed, OTPExpired
         }
         public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye)
         {
             if (string.IsNullOrWhiteSpace(eye.NIK))
             {
-                eye.NIK = GetLastAutoNIK(context);
+                eye.NIK = GetNewAutoNIK(context);
             }
             else
             {
@@ -69,7 +72,6 @@ namespace API.Repository.Interface
                     return DataCheckConstants.NonNumericNIK;
                 }
             }
-
             Boolean emailDuplicate = false, phoneDuplicate = false;
             var emp = context.Employees.SingleOrDefault(x => x.Email.ToLower() == eye.Email.ToLower());
             if (emp != null)
@@ -109,10 +111,6 @@ namespace API.Repository.Interface
             myContext.Employees.Add(employee);
             myContext.SaveChanges();
             return dataCheck;
-        }
-        public Employee GetFirstName(string FirstName)
-        {
-            return myContext.Employees.FirstOrDefault(x => x.FirstName == FirstName);
         }
     }
 }

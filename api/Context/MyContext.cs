@@ -48,10 +48,10 @@ namespace api.Context
                 .Property(g => g.Gender)
                 .HasConversion<string>();
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .EnableSensitiveDataLogging();
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder
+        //        .EnableSensitiveDataLogging();
+        //}
     }
 }

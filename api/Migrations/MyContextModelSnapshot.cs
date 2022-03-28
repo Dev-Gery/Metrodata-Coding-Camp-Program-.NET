@@ -15,14 +15,23 @@ namespace API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("API.Model.Account", b =>
                 {
                     b.Property<string>("NIK")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ExpiredToken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OTP")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -131,6 +140,8 @@ namespace API.Migrations
                         .HasForeignKey("API.Model.Account", "NIK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("API.Model.Education", b =>
@@ -140,6 +151,8 @@ namespace API.Migrations
                         .HasForeignKey("University_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("University");
                 });
 
             modelBuilder.Entity("API.Model.Profiling", b =>
@@ -155,6 +168,30 @@ namespace API.Migrations
                         .HasForeignKey("API.Model.Profiling", "NIK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Education");
+                });
+
+            modelBuilder.Entity("API.Model.Account", b =>
+                {
+                    b.Navigation("Profiling");
+                });
+
+            modelBuilder.Entity("API.Model.Education", b =>
+                {
+                    b.Navigation("Profilings");
+                });
+
+            modelBuilder.Entity("API.Model.University", b =>
+                {
+                    b.Navigation("Educations");
+                });
+
+            modelBuilder.Entity("api.Model.Employee", b =>
+                {
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }

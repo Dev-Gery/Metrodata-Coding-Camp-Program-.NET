@@ -5,6 +5,7 @@ using API.Repository.Data;
 using API.Repository.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Net;
 using static API.Repository.Data.AccountRepository;
 using static API.Repository.Interface.EmployeeRepository;
@@ -21,6 +22,7 @@ namespace API.Controllers
         {
             this.accountRepository = accountRepository;
         }
+
         [HttpPost("account")]
         public new ActionResult Post(Account account)
         {
@@ -51,6 +53,49 @@ namespace API.Controllers
            
 
         }
+
+        [HttpGet("getmasterdata/{NIK}")]    
+        public ActionResult GetTheMasterData(string NIK)
+        {
+            try
+            {
+                var result = accountRepository.GetMasterEyeData(NIK);
+                if (result == null)
+                {
+                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                }
+                else
+                {
+                    return Ok(new { Status = 200, Result = result, Message = "Data ditemukan" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
+
+        [HttpGet("getmasterdata")]
+        public ActionResult GetTheMasterData()
+        {
+            try
+            {
+                var result = accountRepository.GetMasterEyeData();
+                if (result.Count() == 0)
+                {
+                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                }
+                else
+                {
+                    return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
+
         [HttpPost("register")]
         public ActionResult RegisterUp(RegisterVM register)
         {
@@ -59,8 +104,8 @@ namespace API.Controllers
                 DataCheckConstants registration = accountRepository.Register(register);
                 if (registration == DataCheckConstants.ValidData)
                 {
-                    var result = accountRepository.GetMasterData(register.NIK);
-                    return Ok(new { Status = 200, Result = result,  Message = "Data berhasil dimasukkan" });
+                    var result = accountRepository.GetMasterEyeData(register.NIK);
+                    return Ok(new { Status = 200, Result = result, Message = "Data berhasil dimasukkan" });
                 }
                 else if (registration == DataCheckConstants.NIKExists)
                 {
@@ -119,19 +164,18 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("getmasterdata/{NIK}")]
-        public ActionResult GetTheMasterData(string NIK)
+        [HttpPost("resetpassword")]
+        public ActionResult ResetPaswword(ResetPasswordVM vm)
         {
             try
             {
-                var result = accountRepository.GetMasterData(NIK);
-                if (result == null)
+                if (accountRepository.ResetPassword(vm.Email) == DataCheckConstants.EmailExists)
                 {
-                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                    return Ok(new { Status = 200, Message = "Done" });
                 }
                 else
                 {
-                    return Ok(new { Status = 200, Result = result, Message = "Data ditemukan" });
+                    return NotFound(new { Status = 404, Message = "Email not found in the database"});
                 }
             }
             catch (Exception ex)
@@ -140,19 +184,35 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("getmasterdata")]
-        public ActionResult GetTheMasterData()
+        [HttpPost("changepassword")]
+        public ActionResult ChangePassword(ChangePasswordVM changePasswordVM)
         {
             try
             {
-                var result = accountRepository.GetMasterData();
-                if (result == null)
+                var result = accountRepository.ChangePassword(changePasswordVM);
+                if (result == DataCheckConstants.ValidData)
                 {
-                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                    return Ok(new { Status = 200, Message = $"Password of {changePasswordVM.Email} Account Has Changed" });
+                }
+                else if (result == DataCheckConstants.EmailNotExists)
+                {
+                    return NotFound(new { Status = 404, Message = $"Account with the email {changePasswordVM.Email} is not found" });
+                }
+                else if (result == DataCheckConstants.WrongOTP)
+                {
+                    return BadRequest(new { Status = 400, Message = "Wrong OTP" });
+                }
+                else if (result == DataCheckConstants.OTPExpired)
+                {
+                    return BadRequest(new { Status = 400, Message = "Expired OTP" });
+                }
+                else if (result == DataCheckConstants.OTPIsUsed)
+                {
+                    return BadRequest(new { Status = 400, Message = "OTP has been used for a password change before" });
                 }
                 else
                 {
-                    return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
+                    return BadRequest(new { Status = 400, Message = "The new password wasn't confirmed" });
                 }
             }
             catch (Exception ex)

@@ -19,6 +19,7 @@ namespace API.Controllers
         {
             this.employeeRepository = employeeRepository;
         }
+
         [HttpPost("employee")]
         public new ActionResult Post(Employee employee)
         {
@@ -55,11 +56,6 @@ namespace API.Controllers
             {
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
-        }
-        [HttpGet("firstname/{FirstName}")]
-        public ActionResult GetFName(string FirstName)
-        {
-            return Ok(employeeRepository.GetFirstName(FirstName));
         }
     }
 }

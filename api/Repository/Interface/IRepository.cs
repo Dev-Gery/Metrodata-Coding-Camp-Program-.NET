@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static API.Repository.Interface.EmployeeRepository;
 
 namespace API.Repository.Interface
 {

@@ -4,7 +4,7 @@ namespace API.Model.ViewModel
 {
     public class LoginVM
     {
-       [Required] public string Email { get; set; }
+       [Required(ErrorMessage = "Please enter email")] public string Email { get; set; }
        [Required] public string Password { get; set; }
     }
 }
