@@ -3,6 +3,7 @@ using api.Model;
 using API.Controllers.Base;
 using API.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -15,9 +16,11 @@ namespace API.Controllers
     public class EmployeesController : BaseController<Employee, EmployeeRepository, string>
     {
         private readonly EmployeeRepository employeeRepository;
+        
         public EmployeesController(EmployeeRepository employeeRepository) : base(employeeRepository)
         {
             this.employeeRepository = employeeRepository;
+            
         }
 
         [HttpPost("employee")]

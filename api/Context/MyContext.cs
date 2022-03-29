@@ -12,9 +12,11 @@ namespace api.Context
         public DbSet<Profiling> Profilings { get; set; }
         public DbSet<Education> Educations { get; set; }
         public DbSet<University> Universities { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Authority> Authorities { get; set; }
         public MyContext(DbContextOptions<MyContext> option) : base(option)
         {
-            entities = new { Employees, Accounts, Profilings, Educations, Universities };
+            entities = new { Employees, Accounts, Profilings, Educations, Universities, Roles, Authorities };
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +26,9 @@ namespace api.Context
                 .HasForeignKey<Account>(act => act.NIK)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Employee>()
+                .Property(g => g.Gender)
+                .HasConversion<string>();
 
             modelBuilder.Entity<Account>()
                 .HasOne<Profiling>(act => act.Profiling)
@@ -44,9 +49,21 @@ namespace api.Context
                 .HasForeignKey(edu => edu.University_Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Employee>()
-                .Property(g => g.Gender)
-                .HasConversion<string>();
+            modelBuilder.Entity<Authority>()
+                .HasOne<Account>(aty => aty.Account)
+                .WithMany(act => act.Authorities)
+                .HasForeignKey(aty => aty.Account_NIK)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Authority>()
+                .HasOne<Role>(aty => aty.Role)
+                .WithMany(rle => rle.Authorities)
+                .HasForeignKey(aty => aty.Role_Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Authority>()
+                .HasKey(aty => new { aty.Account_NIK, aty.Role_Id });
+
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

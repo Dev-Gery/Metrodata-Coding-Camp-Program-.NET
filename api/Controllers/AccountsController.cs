@@ -3,10 +3,17 @@ using API.Model;
 using API.Model.ViewModel;
 using API.Repository.Data;
 using API.Repository.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
+using System.Text;
 using static API.Repository.Data.AccountRepository;
 using static API.Repository.Interface.EmployeeRepository;
 
@@ -18,9 +25,16 @@ namespace API.Controllers
     {
         private readonly AccountRepository accountRepository;
         
-        public AccountsController(AccountRepository accountRepository) : base(accountRepository)
+        public AccountsController(AccountRepository accountRepository, IConfiguration configuration) : base(accountRepository)
         {
             this.accountRepository = accountRepository;
+        }
+
+        [Authorize]
+        [HttpGet("TestJWT")]
+        public ActionResult TestJWT()
+        {
+            return Ok("Test JWT berhasil");
         }
 
         [HttpPost("account")]
@@ -142,7 +156,7 @@ namespace API.Controllers
                 var status = accountRepository.Login(login);
                 if (status == AccountRepository.LoginCheckConstants.LoginSuccess)
                 {
-                    return Ok(new { Status = 200, Message = "Login berhasil" });
+                    return Ok(new { Status = 200, login.JWT, Message = "Login berhasil" });
                 }
                 else if (status == AccountRepository.LoginCheckConstants.WrongEmail)
                 {

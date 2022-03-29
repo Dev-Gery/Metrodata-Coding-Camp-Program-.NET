@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "CUHvNR+49AbVXf2vgZsWpJUK7OBgzqJBRaJwwRYPDaNBwoNB9a67uhaMjSvhHg4XwvIzHlwR/YPy7m7g5JJ4Bg==",
+  "dgSpecHash": "XqMr7e4XO7CI4aNIt+dI60uXkmsCrBj0c/CAHEHkDqXXPfEJylitHswAtnSNWwE3MVur4hQm3dm93p/+Ux8eQw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Nayn\\OneDrive\\Documents\\GitHub\\Metrodata-Coding-Camp-Program-.NET\\api\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nayn\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.8\\microsoft.aspnetcore.authentication.jwtbearer.3.1.8.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\3.0.0\\microsoft.aspnetcore.jsonpatch.3.0.0.nupkg.sha512",
     "C:\\Users\\Nayn\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\3.0.0\\microsoft.aspnetcore.mvc.newtonsoftjson.3.0.0.nupkg.sha512",

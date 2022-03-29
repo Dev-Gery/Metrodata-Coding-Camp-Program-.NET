@@ -2,7 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace API.Model
 {
@@ -20,6 +21,7 @@ namespace API.Model
         public virtual Employee Employee { get; set; }
         [JsonIgnore]
         public virtual Profiling Profiling { get; set; }
+        public virtual ICollection<Authority> Authorities { get; set; }
 
     }
 }

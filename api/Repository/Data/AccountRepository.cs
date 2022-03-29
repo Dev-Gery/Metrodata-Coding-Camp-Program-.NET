@@ -13,6 +13,10 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Repository.Data
 {
@@ -20,9 +24,11 @@ namespace API.Repository.Data
     {
         private readonly MyContext myContext;
         private Random randomInt = new Random();
-        public AccountRepository(MyContext myContext) : base(myContext)
+        public IConfiguration configuration;
+        public AccountRepository(MyContext myContext, IConfiguration configuration) : base(myContext)
         {
             this.myContext = myContext;
+            this.configuration = configuration;
         }
         public new DataCheckConstants Insert(Account account)
         {
@@ -92,6 +98,14 @@ namespace API.Repository.Data
             myContext.Profilings.Add(plg);
             myContext.SaveChanges();
 
+            var aty = new Authority
+            {
+                Account_NIK = eye.NIK,
+                Role_Id = 3
+            };
+            myContext.Authorities.Add(aty);
+            myContext.SaveChanges();
+
             return DataCheckConstants.ValidData;
         }
         public MasterEyeDataVM GetMasterEyeData(string NIK)
@@ -136,6 +150,51 @@ namespace API.Repository.Data
         {
             LoginSuccess, WrongEmail, WrongPassword, InexistentAccount
         }
+        public string GenerateJWT(Employee eye, LoginVM loginVM)
+        {
+            var NIK = eye.NIK;
+            List<int> roleIds = new List<int>() { };
+            List<string> roles = new List<string>() { };
+
+            foreach (Authority authority in myContext.Authorities)
+            {
+                if (authority.Account_NIK == eye.NIK)
+                {
+                    roleIds.Add(authority.Role_Id);
+                }
+            }
+            roleIds.Sort();
+            foreach (int roleId in roleIds)
+            {
+                foreach (Role role in myContext.Roles)
+                {
+                    if (roleId == role.Id)
+                    {
+                        roles.Add(role.Name);
+                        break;
+                    }
+                }
+            }
+
+            var claims = new List<Claim>();
+            claims.Add(new Claim("Email", loginVM.Email));
+            foreach (String role in roles)
+            {
+                claims.Add(new Claim("roles", role));
+            }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                configuration["Jwt:Issuer"],
+                configuration["Jwt:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(10),
+                signingCredentials: signIn
+                );
+            var idToken = new JwtSecurityTokenHandler().WriteToken(token);
+            claims.Add(new Claim("TokenSecurity", idToken.ToString()));
+            return idToken;
+        }
         public LoginCheckConstants Login(LoginVM loginVM)
         {
             var eyes = myContext.Employees;
@@ -156,6 +215,7 @@ namespace API.Repository.Data
             bool PasswordMatch  = Hashing.ValidatePassword(loginVM.Password, act.Password);
             if (PasswordMatch)
             {
+                loginVM.JWT = GenerateJWT(eye, loginVM);
                 return LoginCheckConstants.LoginSuccess;
             }
             else
