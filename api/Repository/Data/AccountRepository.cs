@@ -193,7 +193,7 @@ namespace API.Repository.Data
                 throw new Exception(ex.Message);
             }
             string to = recipientEmail; //To address    
-            string from = "gerysumual@gmail.com"; //From address    
+            string from = ""; //From address    
             MailMessage message = new MailMessage(from, to);
             message.Subject = "Sending Email Using Asp.Net & C#";
             message.Body = $"This email is used to send OTP for resetting account password.\nHere is your OTP: {account.OTP}";

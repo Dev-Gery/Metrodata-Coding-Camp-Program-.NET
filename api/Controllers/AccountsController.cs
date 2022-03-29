@@ -171,7 +171,7 @@ namespace API.Controllers
             {
                 if (accountRepository.ResetPassword(vm.Email) == DataCheckConstants.EmailExists)
                 {
-                    return Ok(new { Status = 200, Message = "Done" });
+                    return Ok(new { Status = 200, Message = "OTP sent" });
                 }
                 else
                 {
@@ -190,30 +190,23 @@ namespace API.Controllers
             try
             {
                 var result = accountRepository.ChangePassword(changePasswordVM);
-                if (result == DataCheckConstants.ValidData)
+                switch (result)
                 {
-                    return Ok(new { Status = 200, Message = $"Password of {changePasswordVM.Email} Account Has Changed" });
-                }
-                else if (result == DataCheckConstants.EmailNotExists)
-                {
-                    return NotFound(new { Status = 404, Message = $"Account with the email {changePasswordVM.Email} is not found" });
-                }
-                else if (result == DataCheckConstants.WrongOTP)
-                {
-                    return BadRequest(new { Status = 400, Message = "Wrong OTP" });
-                }
-                else if (result == DataCheckConstants.OTPExpired)
-                {
-                    return BadRequest(new { Status = 400, Message = "Expired OTP" });
-                }
-                else if (result == DataCheckConstants.OTPIsUsed)
-                {
-                    return BadRequest(new { Status = 400, Message = "OTP has been used for a password change before" });
-                }
-                else
-                {
-                    return BadRequest(new { Status = 400, Message = "The new password wasn't confirmed" });
-                }
+                    case DataCheckConstants.ValidData:
+                        return Ok(new { Status = 200, Message = $"The password of {changePasswordVM.Email} account has changed" });
+                    case DataCheckConstants.EmailNotExists:
+                        return NotFound(new { Status = 404, Message = $"Wrong email" });
+                    case DataCheckConstants.WrongOTP:
+                        return BadRequest(new { Status = 400, Message = "Wrong OTP" });
+                    case DataCheckConstants.OTPExpired:
+                        return BadRequest(new { Status = 400, Message = "Expired OTP" });
+                    case DataCheckConstants.OTPIsUsed:
+                        return BadRequest(new { Status = 400, Message = "OTP has been used for a password change once before" });
+                    case DataCheckConstants.InconsistentNewPassword:
+                        return BadRequest(new { Status = 400, Message = "The new password wasn't confirmed" });
+                    default:
+                        return null;
+                }                
             }
             catch (Exception ex)
             {
