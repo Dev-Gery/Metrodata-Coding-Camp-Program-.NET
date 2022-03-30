@@ -1,8 +1,12 @@
 ﻿using API.Controllers.Base;
 using API.Model;
+using API.Model.ViewModel;
 using API.Repository.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -14,6 +18,28 @@ namespace API.Controllers
         public AuthoritiesController(AuthorityRepository authorityRepository) : base(authorityRepository)
         {
             this.authorityRepository = authorityRepository;
+        }
+
+        [Authorize]
+        [HttpGet("TestJWT")]
+        public ActionResult TestJWT()
+        {
+            return Ok("Test JWT berhasil");
+        }
+
+        [Authorize(Roles = "Director")]
+        [HttpPost("AssignManager")]
+        public ActionResult AssignManager(RoleAssigningVM RAGvm)
+        {
+            try
+            {
+                authorityRepository.AssignManager(RAGvm);
+                return Ok(new { Status = 200, result = RAGvm, Message = $"Karyawan dengan NIK {RAGvm.NIK} sekarang telah menjadi manager" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
         }
     }
 }

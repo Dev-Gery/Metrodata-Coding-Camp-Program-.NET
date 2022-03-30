@@ -1,4 +1,5 @@
-﻿using API.Repository.Interface;
+﻿using API.Model;
+using API.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -71,7 +72,11 @@ namespace API.Controllers.Base
             try
             {
                 repository.Insert(entity);
-                return Ok(new { Status = 200, Result = repository.Get(repository.GetKey(entity)), Message = "Data berhasil dimasukkan" });
+                if (entity.GetType() == typeof(Authority))
+                {
+                    return Ok(new { Status = 200, Message = "Data berhasil dimasukkan" });
+                }
+                return Ok(new { Status = 200, Result = repository.Get(repository.GetKeyValues(entity)), Message = "Data berhasil dimasukkan" });
             }
             catch (Exception ex)
             {
@@ -85,7 +90,11 @@ namespace API.Controllers.Base
             try
             {
                 repository.Update(entity);
-                var key = repository.GetKey(entity);
+                if (entity.GetType() == typeof(Authority))
+                {
+                    return Ok(new { Status = 200, Message = "Data berhasil dirubah" });
+                }
+                var key = repository.GetKeyValues(entity);
                 var result = repository.Get(key);
                 return Ok(new { Status = 200, Result = result, Message = "Data berhasil diubah" });
             }

@@ -135,6 +135,15 @@ namespace API.Repository.Data
             {
                 masterData.Gender = "Female";
             }
+
+            masterData.Role_Ids = new List<int> { };
+            masterData.Role_Names = new List<string> { };
+            var roles = myContext.Roles.Where(r => r.Authorities.Any(a => a.Account_NIK == NIK)).ToList<Role>();
+            foreach (var role in roles)
+            {
+                masterData.Role_Ids.Add(role.Id);
+                masterData.Role_Names.Add(role.Name);
+            }
             return masterData;
         }
         public IEnumerable<MasterEyeDataVM> GetMasterEyeData()
@@ -152,7 +161,6 @@ namespace API.Repository.Data
         }
         public string GenerateJWT(Employee eye, LoginVM loginVM)
         {
-            var NIK = eye.NIK;
             List<int> roleIds = new List<int>() { };
             List<string> roles = new List<string>() { };
 

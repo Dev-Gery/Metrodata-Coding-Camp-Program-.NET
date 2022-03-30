@@ -7,7 +7,7 @@ namespace API.Repository.Interface
     {
         IEnumerable<Entity> Get();
         Entity Get(Key key);
-        Key GetKey(Entity entity);
+        Key GetKeyValues(Entity entity);
         int Insert(Entity entity);
         int Update(Entity entity, Key key);
         int Update(Entity entity);

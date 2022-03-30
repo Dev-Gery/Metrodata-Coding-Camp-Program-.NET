@@ -30,11 +30,48 @@ namespace API.Controllers
             this.accountRepository = accountRepository;
         }
 
-        [Authorize]
-        [HttpGet("TestJWT")]
-        public ActionResult TestJWT()
+        [Authorize(Roles = "Director, Manager")]
+        [HttpGet("getmasterdata/{NIK}")]
+        public ActionResult GetTheMasterData(string NIK)
         {
-            return Ok("Test JWT berhasil");
+            try
+            {
+                var result = accountRepository.GetMasterEyeData(NIK);
+                if (result == null)
+                {
+                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                }
+                else
+                {
+                    return Ok(new { Status = 200, Result = result, Message = "Data ditemukan" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "Director, Manager")]
+        [HttpGet("getmasterdata")]
+        public ActionResult GetTheMasterData()
+        {
+            try
+            {
+                var result = accountRepository.GetMasterEyeData();
+                if (result.Count() == 0)
+                {
+                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                }
+                else
+                {
+                    return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
         }
 
         [HttpPost("account")]
@@ -63,50 +100,6 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-            }
-           
-
-        }
-
-        [HttpGet("getmasterdata/{NIK}")]    
-        public ActionResult GetTheMasterData(string NIK)
-        {
-            try
-            {
-                var result = accountRepository.GetMasterEyeData(NIK);
-                if (result == null)
-                {
-                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
-                }
-                else
-                {
-                    return Ok(new { Status = 200, Result = result, Message = "Data ditemukan" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
-            }
-        }
-
-        [HttpGet("getmasterdata")]
-        public ActionResult GetTheMasterData()
-        {
-            try
-            {
-                var result = accountRepository.GetMasterEyeData();
-                if (result.Count() == 0)
-                {
-                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
-                }
-                else
-                {
-                    return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
 

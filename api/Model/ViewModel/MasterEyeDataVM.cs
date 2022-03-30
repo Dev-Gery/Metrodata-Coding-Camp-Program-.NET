@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace API.Model.ViewModel
 {
     public class MasterEyeDataVM
@@ -14,9 +16,7 @@ namespace API.Model.ViewModel
         public string GPA { get; set; }
         public string Degree { get; set; }
         public string University_Name { get; set; }
-    }
-    public enum Gender
-    {
-        Male, Female
+        public List<int> Role_Ids { get; set; }
+        public List<string> Role_Names { get; set; }
     }
 }

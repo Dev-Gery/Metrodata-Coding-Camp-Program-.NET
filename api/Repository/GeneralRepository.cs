@@ -55,7 +55,7 @@ namespace API.Repository
             var result = myContext.SaveChanges();
             return result;
         }
-        public Key GetKey(Entity entity)
+        public Key GetKeyValues(Entity entity)
         {
             var keyName = myContext.Model.FindEntityType(typeof(Entity)).FindPrimaryKey().Properties
                 .Select(x => x.Name).Single();

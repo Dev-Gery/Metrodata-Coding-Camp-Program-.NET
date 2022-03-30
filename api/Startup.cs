@@ -17,7 +17,7 @@ namespace api
 {
     public class Startup
     { 
-        public IConfiguration Configuration { get; set; }
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -47,10 +47,10 @@ namespace api
                 Options.SaveToken = true;
                 Options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateAudience = true,
                     ValidAudience = Configuration["Jwt:Audience"],
-                    ValidIssuer = Configuration["Jwt:Issuer],"],
+                    ValidIssuer = Configuration["Jwt:Issuer]"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
