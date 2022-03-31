@@ -48,14 +48,30 @@ namespace API.Repository.Data
                 VM.Email = eye.Email;
                 VM.Phone = eye.Phone;
                 VM.Gender = eyeGender;
-                VM.Role_Ids = new List<int> { };
-                VM.Role_Names = new List<string> { };
+                VM.Role_Ids = "";
+                VM.Role_Names = "";
                 var roles = myContext.Roles.Where(r => r.Authorities.Any(a => a.Account_NIK == VM.NIK)).ToList<Role>();
-                foreach (var role in roles)
+                for (int i = 0; i < roles.Count; i++)
                 {
-                    VM.Role_Ids.Add(role.Id);
-                    VM.Role_Names.Add(role.Name);
+                    if (i == roles.Count - 1)
+                    {
+                        VM.Role_Ids += roles[i].Id.ToString();
+                        VM.Role_Names += roles[i].Name;
+                    }
+                    else
+                    {
+                        VM.Role_Ids += roles[i].Id.ToString() + ", ";
+                        VM.Role_Names += roles[i].Name + ", ";
+                    } 
                 }
+
+                //VM.Role_Ids = new List<int> { };
+                //VM.Role_Names = new List<string> { };
+                //foreach (var role in roles)
+                //{
+                //    VM.Role_Ids.Add(role.Id);
+                //    VM.Role_Names.Add(role.Name);
+                //}
             }
             catch (Exception ex)
             {

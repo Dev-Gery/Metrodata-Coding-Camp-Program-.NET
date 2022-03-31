@@ -136,14 +136,30 @@ namespace API.Repository.Data
                 masterData.Gender = "Female";
             }
 
-            masterData.Role_Ids = new List<int> { };
-            masterData.Role_Names = new List<string> { };
+            masterData.Role_Ids = "";
+            masterData.Role_Names = "";
             var roles = myContext.Roles.Where(r => r.Authorities.Any(a => a.Account_NIK == NIK)).ToList<Role>();
-            foreach (var role in roles)
+            for (int i = 0; i < roles.Count; i++)
             {
-                masterData.Role_Ids.Add(role.Id);
-                masterData.Role_Names.Add(role.Name);
+                if (i == roles.Count - 1)
+                {
+                    masterData.Role_Ids += roles[i].Id.ToString();
+                    masterData.Role_Names += roles[i].Name;
+                }
+                else
+                {
+                    masterData.Role_Ids += roles[i].Id.ToString() + ", ";
+                    masterData.Role_Names += roles[i].Name + ", ";
+                }
             }
+            //masterData.Role_Ids = new List<int> { };
+            //masterData.Role_Names = new List<string> { };
+            //var roles = myContext.Roles.Where(r => r.Authorities.Any(a => a.Account_NIK == NIK)).ToList<Role>();
+            //foreach (var role in roles)
+            //{
+            //    masterData.Role_Ids.Add(role.Id);
+            //    masterData.Role_Names.Add(role.Name);
+            //}
             return masterData;
         }
         public IEnumerable<MasterEyeDataVM> GetMasterEyeData()

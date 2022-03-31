@@ -16,7 +16,7 @@ namespace API.Model.ViewModel
         public string GPA { get; set; }
         public string Degree { get; set; }
         public string University_Name { get; set; }
-        public List<int> Role_Ids { get; set; }
-        public List<string> Role_Names { get; set; }
+        public string Role_Ids { get; set; }
+        public string Role_Names { get; set; }
     }
 }
