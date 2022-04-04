@@ -1,0 +1,20 @@
+h1{
+  color: green;
+  font-size: 200px
+}
+
+img:hover{
+  background-color: gold;
+}
+
+.broccoli{
+  background-color: green;
+}
+
+.circular{
+  border-radius: 100%;
+}
+
+#heading{
+  font-size: 100px;
+}

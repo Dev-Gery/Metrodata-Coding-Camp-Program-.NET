@@ -1,0 +1,24 @@
+﻿header {
+    position: sticky;
+    top: 0px;
+}
+
+body {
+    background-color: azure;
+    /*  overflow-x: hidden;
+    overflow-y: auto;*/
+    height: 200vh;
+    position: relative;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.bodyrow{
+    border-style: groove;
+    border-width: medium;
+}
