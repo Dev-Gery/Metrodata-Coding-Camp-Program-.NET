@@ -285,7 +285,7 @@ namespace API.Repository.Data
             message.IsBodyHtml = true;
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
             NetworkCredential basicCredential1 = new
-            NetworkCredential("gherysumual@gmail.com", "14mnumber49");
+            NetworkCredential("", "");
             client.EnableSsl = true;
             client.UseDefaultCredentials = false;
             client.Credentials = basicCredential1;
