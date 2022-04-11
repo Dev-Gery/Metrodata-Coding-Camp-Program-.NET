@@ -50,6 +50,7 @@
                 "autoWidth": true
             },
             {
+                "data": null,
                 "orderable": false,
                 render: function (data,type,row, meta) {
                     return `<button class="btn btn-primary" onClick="GetUpdateModal('${row.nik}')" data-toggle="modal" data-target="#updateForm">Edit</button><br>
@@ -65,7 +66,7 @@ function GetUniData() {
         url: "https://localhost:44327/api/universities/",
         success: function (results) {
             console.log(results.result);
-            var text = "<option selected>Choose...</option>";
+            var text = `<option selected value="">Choose...</option>`;
             $.each(results.result, function (key, val) {
                 text += `<option type="number" value="${val.id}">${val.name}</option>`
             });
@@ -104,7 +105,6 @@ function Insert() {
         location.reload();
     }).fail((error) => {
         alert("Registration error");
-        location.reload();
 })
 }
 

@@ -72,10 +72,6 @@ namespace API.Controllers.Base
             try
             {
                 repository.Insert(entity);
-                if (entity.GetType() == typeof(Authority))
-                {
-                    return Ok(new { Status = 200, Message = "Data berhasil dimasukkan" });
-                }
                 return Ok(new { Status = 200, Result = repository.Get(repository.GetKeyValues(entity)), Message = "Data berhasil dimasukkan" });
             }
             catch (Exception ex)

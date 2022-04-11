@@ -34,51 +34,51 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form onsubmit="Insert()" class="needs-validation" novalidate>
                   <div class="form-row">
                         <div class="col-md-3 mb-3">
-                            <label for="validationCustom01">First name</label>
+                            <label for="firstname">First name</label>
                             <input id="firstname" type="text" class="form-control" placeholder="First name" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationCustom02">Last name</label>
+                            <label for="lastname">Last name</label>
                             <input id="lastname" type="text" class="form-control" placeholder="Last name" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
-                         <div class="col-md-3 mb-3">
-                            <label for="validationCustom02">Gender</label>
-                            <select id="gender" class="custom-select mr-sm-2">
-                                <option selected>Choose...</option>
+                         <div class="col-md-3 mb-3 form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" class="custom-select mr-sm-2" required>
+                                <option selected value="">Choose...</option>
                                 <option type="number" value="0">Male</option>
                                 <option type="number" value="1">Female</option>
                             </select>
-                            <div class="valid-feedback">
-                                Looks good!
+                            <div class="invalid-feedback">
+                                Please choose your gender
                             </div>
                         </div>
                          <div class="col-md-3 mb-3">
-                            <label for="validationCustom02">Birth date</label>
+                            <label for="birthdate">Birth date</label>
                             <input id="birthdate" type="date" class="form-control" placeholder="birthdate" required>
-                            <div class="valid-feedback">
-                                Looks good!
+                            <div class="invalid-feedback">
+                                Please choose your birthdate
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
-                            <label for="validationCustom03">Phone</label>
+                            <label for="phone">Phone</label>
                             <input id="phone" type="text" class="form-control" placeholder="Phone" required>
                             <div class="invalid-feedback">
-                                Please provide a valid city.
+                                Please provide a phone number.
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="validationCustomUsername">Email</label>
+                            <label for="email">Email</label>
                             <div class="input-group">
                                 <input id="email" type="text" class="form-control" placeholder="Email" aria-describedby="inputGroupPrepend" required>
                                 <div class="invalid-feedback">
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="validationCustom04">Password</label>
+                            <label for="password">Password</label>
                             <input id="password" type="text" class="form-control" placeholder="Password" required>
                             <div class="invalid-feedback">
                                 Please provide a password.
@@ -95,37 +95,28 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-3 mb-3">
-                            <label for="validationCustom03">University</label>
+                        <div class="col-md-3 mb-3 form-group">
+                            <label for="uni">University</label>
                             <select id="uni" class="custom-select mr-sm-2">
                             </select>
-                            <div class="invalid-feedback">
-                                Please enter a university.
-                            </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationCustom04">Degree</label>
-                            <input id="degree" type="text" class="form-control" placeholder="Latest Degree" required>
-                            <div class="invalid-feedback">
-                                Please provide the degree.
-                            </div>
+                            <label for="degree">Degree</label>
+                            <input id="degree" type="text" class="form-control" placeholder="Latest Degree">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationCustom05">GPA</label>
-                            <input id="gpa" type="text" class="form-control" placeholder="Latest GPA" required>
-                            <div class="invalid-feedback">
-                                Please provide a GPA.
-                            </div>
+                            <label for="gpa">GPA</label>
+                            <input id="gpa" type="text" class="form-control" placeholder="Latest GPA">
                         </div>
                         <div  class="col-md-3 mb-3">
-                            <label for="validationCustom04">Salary</label>
+                            <label for="salary">Salary</label>
                             <input id="salary" type="number" class="form-control" placeholder="Nominal" required>
                             <div class="invalid-feedback">
                                 Please provide a salary number.
                             </div>
                         </div>
                     </div>
-                  <button class="btn btn-primary d-block ml-auto" onclick="Insert()">Submit</button>
+                  <button class="btn btn-primary d-block ml-auto" type="submit">Submit</button>
                 </form>
             </div>
         </div>
@@ -134,6 +125,7 @@
         </div>
     </div>
 </div>
+
                                                 <!-- edit employee modal-->
 <div class="modal fade" id="updateForm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -224,3 +216,23 @@
     </div>
 </div>
  
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

@@ -41,5 +41,17 @@ namespace API.Controllers
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
+        public override ActionResult<Authority> Post(Authority aty)
+        {
+            try
+            {
+                authorityRepository.Insert(aty);
+                return Ok(new { Status = 200, Message = "Data berhasil dimasukkan" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
     }
 }
