@@ -34,8 +34,7 @@ namespace api.Context
                 .HasOne<Profiling>(act => act.Profiling)
                 .WithOne(plg => plg.Account)
                 .HasForeignKey<Profiling>(plg => plg.NIK)
-                .OnDelete(DeleteBehavior.Cascade);
-                
+                .OnDelete(DeleteBehavior.Cascade);               
  
             modelBuilder.Entity<Profiling>()
                 .HasOne<Education>(plg => plg.Education)
@@ -53,13 +52,13 @@ namespace api.Context
                 .HasOne<Account>(aty => aty.Account)
                 .WithMany(act => act.Authorities)
                 .HasForeignKey(aty => aty.Account_NIK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Authority>()
                 .HasOne<Role>(aty => aty.Role)
                 .WithMany(rle => rle.Authorities)
                 .HasForeignKey(aty => aty.Role_Id)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Authority>()
                 .HasKey(aty => new { aty.Account_NIK, aty.Role_Id });

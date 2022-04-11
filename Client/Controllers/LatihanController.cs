@@ -22,5 +22,13 @@ namespace Client.Controllers
         {
             return View();
         }
+        public IActionResult MasterEmpData()
+        {
+            return View();
+        }
+        public IActionResult Pokemon()
+        {
+            return View();
+        }
     }
 }

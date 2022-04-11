@@ -180,13 +180,13 @@ namespace API.Migrations
                     b.HasOne("API.Model.Account", "Account")
                         .WithMany("Authorities")
                         .HasForeignKey("Account_NIK")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Model.Role", "Role")
                         .WithMany("Authorities")
                         .HasForeignKey("Role_Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");

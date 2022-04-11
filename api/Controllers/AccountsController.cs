@@ -74,8 +74,28 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("account")]
-        public new ActionResult Post(Account account)
+        [HttpGet("masterdata")]
+        public ActionResult TheMasterData()
+        {
+            //try
+            //{
+                var result = accountRepository.GetMasterEyeData();
+                if (result.Count() == 0)
+                {
+                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+            //}
+        }
+
+        public override ActionResult<Account> Post(Account account)
         {
             try
             {

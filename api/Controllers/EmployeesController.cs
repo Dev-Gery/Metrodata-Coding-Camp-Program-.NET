@@ -29,8 +29,7 @@ namespace API.Controllers
             return Ok("Test CORS berhasil");
         }
 
-        [HttpPost("employee")]
-        public new ActionResult Post(Employee employee)
+        public override ActionResult<Employee> Post(Employee employee)
         {
             try
             {
@@ -66,5 +65,20 @@ namespace API.Controllers
                 return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
+
+        //public override ActionResult<Employee> Delete(string nik)
+        //{
+        //    //try
+        //    //{
+        //        var result = employeeRepository.Get(nik);
+        //        var deletedRowNum = employeeRepository.Delete(nik);
+        //        return Ok(new { Status = 200, result, message = $"{deletedRowNum} Data terhapus" });
+        //    //}
+        //    //catch (Exception)
+        //    //{
+        //    //    var result = employeeRepository.Get(nik);
+        //    //    return BadRequest(new { status = HttpStatusCode.BadRequest, result, message = "Data tidak ditemukan atau terjadi kesalahan" });
+        //    //}
+        //}
     }
 }

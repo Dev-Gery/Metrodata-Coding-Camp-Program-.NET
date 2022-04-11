@@ -19,7 +19,7 @@ namespace API.Repository
             entities = myContext.Set<Entity>();
         }
 
-        public int Delete(Key key)
+        public virtual int Delete(Key key)
         {
             var entity = entities.Find(key);
             myContext.Remove(entity);

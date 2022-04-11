@@ -1,0 +1,226 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_DashboardLayout";
+}
+
+<table class="table table-hover table-border TabelMasterData" >
+    <thead class="thead-dark">
+        <tr>
+            <th>NIK</th>
+            <th>Nama Lengkap</th>
+            <th>Gender</th>
+            <th>Birthdate</th>
+            <th>Telepon</th>
+            <th>Email</th>
+            <th>Jabatan</th>
+            <th>Salary</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="MasterData">
+    </tbody>
+</table>
+
+<button id = "addEmp" class="btn btn-primary" onclick="GetUniData()" data-toggle="modal" data-target="#submitForm">Register</button>
+
+                                                <!-- Register employee modal-->
+<div class="modal fade" id="submitForm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registration</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                  <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom01">First name</label>
+                            <input id="firstname" type="text" class="form-control" placeholder="First name" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom02">Last name</label>
+                            <input id="lastname" type="text" class="form-control" placeholder="Last name" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                         <div class="col-md-3 mb-3">
+                            <label for="validationCustom02">Gender</label>
+                            <select id="gender" class="custom-select mr-sm-2">
+                                <option selected>Choose...</option>
+                                <option type="number" value="0">Male</option>
+                                <option type="number" value="1">Female</option>
+                            </select>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                         <div class="col-md-3 mb-3">
+                            <label for="validationCustom02">Birth date</label>
+                            <input id="birthdate" type="date" class="form-control" placeholder="birthdate" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom03">Phone</label>
+                            <input id="phone" type="text" class="form-control" placeholder="Phone" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustomUsername">Email</label>
+                            <div class="input-group">
+                                <input id="email" type="text" class="form-control" placeholder="Email" aria-describedby="inputGroupPrepend" required>
+                                <div class="invalid-feedback">
+                                    Please enter your email.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom04">Password</label>
+                            <input id="password" type="text" class="form-control" placeholder="Password" required>
+                            <div class="invalid-feedback">
+                                Please provide a password.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom03">University</label>
+                            <select id="uni" class="custom-select mr-sm-2">
+                            </select>
+                            <div class="invalid-feedback">
+                                Please enter a university.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom04">Degree</label>
+                            <input id="degree" type="text" class="form-control" placeholder="Latest Degree" required>
+                            <div class="invalid-feedback">
+                                Please provide the degree.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom05">GPA</label>
+                            <input id="gpa" type="text" class="form-control" placeholder="Latest GPA" required>
+                            <div class="invalid-feedback">
+                                Please provide a GPA.
+                            </div>
+                        </div>
+                        <div  class="col-md-3 mb-3">
+                            <label for="validationCustom04">Salary</label>
+                            <input id="salary" type="number" class="form-control" placeholder="Nominal" required>
+                            <div class="invalid-feedback">
+                                Please provide a salary number.
+                            </div>
+                        </div>
+                    </div>
+                  <button class="btn btn-primary d-block ml-auto" onclick="Insert()">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+                                                <!-- edit employee modal-->
+<div class="modal fade" id="updateForm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                  <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom01">First name</label>
+                            <input id="ufirstname" type="text" class="form-control" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationCustom02">Last name</label>
+                            <input id="ulastname" type="text" class="form-control" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                         <div class="col-md-3 mb-3">
+                            <label for="validationCustom02">Gender</label>
+                            <select id="ugender" class="custom-select mr-sm-2">
+                                <option selected>Choose...</option>
+                                <option type="number" value="0">Male</option>
+                                <option type="number" value="1">Female</option>
+                            </select>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                         <div class="col-md-3 mb-3">
+                            <label for="validationCustom02">Birth date</label>
+                            <input id="ubirthdate" type="date" class="form-control" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom03">Salary</label>
+                            <input id="usalary" type="number" class="form-control" required>
+                            <div class="invalid-feedback">
+                                Please provide a salary.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom03">Phone</label>
+                            <input id="uphone" type="text" class="form-control" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustomUsername">Email</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend"></span>
+                                </div>
+                                <input id="uemail" type="text" class="form-control"  aria-describedby="inputGroupPrepend" required>
+                                <div class="invalid-feedback">
+                                    Please enter your email.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" style="display:none">
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom03">NIK</label>
+                            <input id="unik" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                  <button class="btn btn-primary d-block ml-auto" onclick="Update()">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+ 

@@ -67,7 +67,7 @@ namespace API.Controllers.Base
         }
 
         [HttpPost]
-        public ActionResult<Entity> Post(Entity entity)
+        public virtual ActionResult<Entity> Post(Entity entity)
         {
             try
             {
@@ -105,13 +105,13 @@ namespace API.Controllers.Base
         }
 
         [HttpDelete("{key}")]
-        public ActionResult<Entity> Delete(Key key)
+        public virtual ActionResult<Entity> Delete(Key key)
         {
             try
             {
                 var result = repository.Get(key);
-                repository.Delete(key);
-                return Ok(new { Status = 200, result, message = "Data terhapus" });
+                var rowNum = repository.Delete(key);
+                return Ok(new { Status = 200, result, message = $"{rowNum} Data terhapus" });
             }
             catch (Exception)
             {
@@ -121,7 +121,7 @@ namespace API.Controllers.Base
         }
 
         [HttpDelete]
-        public ActionResult<Entity> DeleteAll()
+        public virtual ActionResult<Entity> DeleteAll()
         {
             try
             {

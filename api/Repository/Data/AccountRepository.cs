@@ -17,6 +17,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
+using API.Repository.Interface;
 
 namespace API.Repository.Data
 {
@@ -71,7 +72,6 @@ namespace API.Repository.Data
             };
             registerVM.NIK = eye.NIK;
             myContext.Employees.Add(eye);
-            myContext.SaveChanges();
 
             var act = new Account
             {
@@ -79,7 +79,6 @@ namespace API.Repository.Data
                 Password = Hashing.GenerateHashPassword(registerVM.Password)
             };
             myContext.Accounts.Add(act);
-            myContext.SaveChanges();
 
             var etn = new Education
             {
@@ -96,7 +95,6 @@ namespace API.Repository.Data
                 Education_Id = etn.Id
             };
             myContext.Profilings.Add(plg);
-            myContext.SaveChanges();
 
             var aty = new Authority
             {
@@ -111,7 +109,7 @@ namespace API.Repository.Data
         public MasterEyeDataVM GetMasterEyeData(string NIK)
         {
             Employee eye = myContext.Employees.Find(NIK);
-            Profiling plg = myContext.Profilings.Find(eye.NIK);
+            Profiling plg = myContext.Profilings.Find(NIK);
             Education edu = myContext.Educations.Find(plg.Education_Id);
             University uty = myContext.Universities.Find(edu.University_Id);
             MasterEyeDataVM masterData = new MasterEyeDataVM
