@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('.TabelMasterData').DataTable({
+    $('#TabelMasterData').DataTable({
         dom: "<'row justify-content-between align-items-center'<'col-md-3'l><'d-flex align-items-center justify-content-center'<'mr-3'B><'mt-1'f>>>" +
             "<'row'<'col-md-12'tr>>" +
             "<'row'<'col-md-5'i><'col-md-7'p>>",
@@ -11,7 +11,7 @@
         "ajax": {
             "url": "https://localhost:44327/api/accounts/masterdata",
             "datatype": "json",
-            "dataSrc": ""
+            "dataSrc": "result"  
         },
         "columns": [
             {
@@ -21,7 +21,7 @@
                 "data": "fullName"
             },
             {
-                "data": "gender"
+                "data": "gender",
             },
             {
                 "data": "birthDate",
@@ -52,7 +52,7 @@
             {
                 "data": null,
                 "orderable": false,
-                render: function (data,type,row, meta) {
+                render: function (data, type, row, meta) {
                     return `<button class="btn btn-primary" onClick="GetUpdateModal('${row.nik}')" data-toggle="modal" data-target="#updateForm">Edit</button><br>
                             <button class="btn btn-primary" onClick="Delete('${row.nik}')">Delete</button>`;
                 },
@@ -61,20 +61,75 @@
     });
 });
 
-function GetUniData() {
-    $.ajax({
-        url: "https://localhost:44327/api/universities/",
-        success: function (results) {
-            console.log(results.result);
-            var text = `<option selected value="">Choose...</option>`;
-            $.each(results.result, function (key, val) {
-                text += `<option type="number" value="${val.id}">${val.name}</option>`
-            });
-            console.log(text);
-            $("#uni").html(text);
+
+$.ajax({
+    url: "https://localhost:44327/api/accounts/masterdata",
+    success: function (results) {
+        var result = results.result;
+        let genderDataArray = [0, 0];
+        $.each(result, function (key, val) {
+            if (val.gender == "Male") {
+                genderDataArray[0] += 1;
+            }
+            else {
+                genderDataArray[1] += 1;
+            }
+        });
+        console.log(genderDataArray);
+        var options = {
+            chart: {
+                type: "pie"
+            },
+            series: genderDataArray,
+            labels: ["Male", "Female"]
         }
-    })
-}
+        var chart = new ApexCharts(document.querySelector("#genderchart"), options)
+        chart.render();
+    }
+})
+
+let universityData = [];
+$.ajax({
+    url: "https://localhost:44327/api/universities/",
+    success: function (results) {
+        let result = results.result;
+        let text = `<option selected value="">Choose...</option>`;
+        $.each(result, function (key, val) {
+            universityData.push({ x: val.name, y: 0 });
+            text += `<option type="number" value="${val.id}">${val.name}</option>`
+        });
+        $("#uni").html(text);
+    }
+})
+
+$.ajax({
+    url: "https://localhost:44327/api/accounts/masterdata",
+    success: function (results) {
+        var result = results.result;
+        $.each(result, function (key, val) {
+            for (var i = 0; i < universityData.length; i++) {
+                if (universityData[i].x == val.university_Name) {
+                    universityData[i].y += 1;
+                    break;
+                }
+            }
+        });
+        var options = {
+            chart: {
+                height: 417,
+                type: "bar"
+            },
+            series: [{
+                data: universityData
+            }],
+            xaxis: {
+                type: 'category'
+            }
+        }
+        var chart = new ApexCharts(document.querySelector("#unichart"), options)
+        chart.render();
+    }
+})
 
 function Insert() {
     event.preventDefault();
@@ -152,7 +207,6 @@ function Update() {
     $.ajax({
         url: "https://localhost:44327/api/employees",
         type: "PUT",
-        //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify(data );)
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -162,7 +216,6 @@ function Update() {
     }).done((result) => {
         alert("Edit success");
         location.reload();
-        //buat alert pemberitahuan jika success
     }).fail((error) => {
         alert("Edit error");
         location.reload();

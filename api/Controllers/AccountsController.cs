@@ -86,8 +86,8 @@ namespace API.Controllers
                 }
                 else
                 {
-                    return Ok(result);
-                }
+                    return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
+            }
             //}
             //catch (Exception ex)
             //{

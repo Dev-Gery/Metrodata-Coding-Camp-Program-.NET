@@ -3,7 +3,7 @@
     Layout = "_DashboardLayout";
 }
 
-<table class="table table-hover table-border TabelMasterData" >
+<table id="TabelMasterData" class="table table-hover table-border" >
     <thead class="thead-dark">
         <tr>
             <th>NIK</th>
@@ -21,7 +21,7 @@
     </tbody>
 </table>
 
-<button id = "addEmp" class="btn btn-primary" onclick="GetUniData()" data-toggle="modal" data-target="#submitForm">Register</button>
+<button id = "addEmp" class="btn btn-primary" data-toggle="modal" data-target="#submitForm">Register</button>
 
                                                 <!-- Register employee modal-->
 <div class="modal fade" id="submitForm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
