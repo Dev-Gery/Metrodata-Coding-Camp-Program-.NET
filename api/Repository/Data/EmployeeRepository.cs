@@ -59,14 +59,14 @@ namespace API.Repository.Interface
             NIKExists, NIKNotExists, NonNumericNIK, EmailExists, EmailNotExists, PhoneExists,
             EmailPhoneExist, ValidData, WrongOTP, InconsistentNewPassword, OTPIsUsed, OTPExpired
         }
-        public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye)
+        public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye, string httpmethod = "post")
         {
             if (!string.IsNullOrWhiteSpace(eye.NIK))
             { 
                 string fixNIK = Regex.Replace(eye.NIK, "\\s", "");
                 if (Regex.IsMatch(fixNIK, "^[0-9]+$"))
                 {
-                    if (context.Employees.Find(fixNIK) != null)
+                    if (httpmethod == "post" && context.Employees.Find(fixNIK) != null)
                     {
                         return DataCheckConstants.NIKExists;
                     }
@@ -85,12 +85,12 @@ namespace API.Repository.Interface
                 //GetNewAutoNIK() is postponed until all the data is valid
             }
             Boolean emailDuplicate = false, phoneDuplicate = false;
-            var emp = context.Employees.SingleOrDefault(x => x.Email.ToLower() == eye.Email.ToLower());
+            var emp = context.Employees.SingleOrDefault(x => x.Email.ToLower() == eye.Email.ToLower() && x.NIK != eye.NIK);
             if (emp != null)
             {
                 emailDuplicate = true;
             }
-            emp = context.Employees.SingleOrDefault(x => x.Phone == eye.Phone);
+            emp = context.Employees.SingleOrDefault(x => x.Phone == eye.Phone && x.NIK != eye.NIK);
             if (emp != null)
             {
                 phoneDuplicate = true;
@@ -125,6 +125,18 @@ namespace API.Repository.Interface
                 return dataCheck;
             }
             myContext.Employees.Add(employee);
+            myContext.SaveChanges();
+            return dataCheck;
+        }
+
+        public new DataCheckConstants Update(Employee employee)
+        {
+            var dataCheck = EyeDataCheck(myContext, employee, "put");
+            if (dataCheck != DataCheckConstants.ValidData)
+            {
+                return dataCheck;
+            }
+            myContext.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             myContext.SaveChanges();
             return dataCheck;
         }

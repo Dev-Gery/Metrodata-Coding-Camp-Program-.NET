@@ -19,6 +19,11 @@ namespace Client.Controllers
             this.repository = repository;
         }
 
+        public override JsonResult Put(Employee employee)
+        {
+            var result = repository.PutUp(employee);
+            return Json(result);
+        }
         //[HttpGet]
         //public async Task<JsonResult> GetByNIK(string nik)
         //{

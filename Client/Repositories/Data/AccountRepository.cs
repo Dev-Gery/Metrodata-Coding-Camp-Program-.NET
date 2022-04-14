@@ -37,18 +37,23 @@ namespace BelajarCORS.Repositories.Data
             return result;
         }
 
-        public HttpStatusCode Register(RegisterVM registerVM)
+        public object Register(RegisterVM registerVM)
         {
+            object responseJSON;
             StringContent content = new StringContent(JsonConvert.SerializeObject(registerVM), Encoding.UTF8, "application/json");
-            var result = httpClient.PostAsync(request + "register", content).Result;
-            return result.StatusCode;
+            using (var response = httpClient.PostAsync(request + "register", content).Result)
+            {
+                string responseString = response.Content.ReadAsStringAsync().Result;
+                responseJSON = JsonConvert.DeserializeObject(responseString);
+            }
+            return responseJSON;
         }
 
         public object Login(LoginVM loginVM)
         {
+            object results;
             StringContent content = new StringContent(JsonConvert.SerializeObject(loginVM), Encoding.UTF8, "application/json");
-            object results = new object();
-            using (var response = httpClient.PostAsync(request + "login", content).Result)
+            using(var response = httpClient.PostAsync(request + "login", content).Result)
             {
                 string apiResponse = response.Content.ReadAsStringAsync().Result;
                 results = JsonConvert.DeserializeObject(apiResponse);

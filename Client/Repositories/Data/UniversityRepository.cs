@@ -20,11 +20,5 @@ namespace BelajarCORS.Repositories.Data
         {
             //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _contextAccessor.HttpContext.Session.GetString("JWToken"));
         }
-
-        //public async Task<List<RegisterVM>> GetAllProfile()
-        //{
-        //    /// isi codingan kalian disini
-            
-        //}
     }
 }

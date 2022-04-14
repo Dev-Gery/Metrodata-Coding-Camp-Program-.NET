@@ -48,6 +48,13 @@
         },
         "columns": [
             {
+                data: null,
+                autoWidth: true,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1
+                }
+            },
+            {
                 "data": "nik"
             },
             {
@@ -57,15 +64,21 @@
                 "data": "gender"
             },
             {
-                "data": "birthDate",
+                "data": null,
                 "render": function (data, type, row) {
                     return moment(row["birthDate"]).format('LL');
                 }
             },
             {
-                "data": "phone",
+                "data": null,
                 "render": function (data, type, row) {
-                    return "+62" + row["phone"].substring(1);
+                    let phone = data['phone'];
+                    if (phone != null && phone != '') {
+                        if (phone[0] == '0') {
+                            return "+62" + phone.substring(1);
+                        }
+                    }
+                    return phone;
                 },
                 "autoWidth": true
             },
@@ -76,9 +89,19 @@
                 "data": "role_Names"
             },
             {
-                "data": "salary",
+                "data": null,
                 "render": function (data, type, row) {
-                    return "RP" + row["salary"];
+                    let sal = data['salary'].toString();
+                    let salLength = sal.length;
+                    var newSal = '';
+                    if (salLength > 3) {
+                        newSal = sal.substring(0, salLength % 3);
+                        for (var i = newSal.length; i < salLength; i += 3) {
+                            newSal += '.' + sal.substring(i, i + 3);
+                        }
+                        sal = newSal;
+                    }
+                    return "Rp" + sal + ",00";
                 },
                 "autoWidth": true
             },
@@ -179,7 +202,7 @@ $.ajax({
 
 function Insert() {
     event.preventDefault();
-    var emp = {
+    var register = {
         FirstName : $("#firstname").val(),
         LastName : $("#lastname").val(),
         Phone : $("#phone").val(),
@@ -196,27 +219,40 @@ function Insert() {
         url: "accounts/register",
         type: "POST",
         dataType: 'json',
-        data: emp
-    }).done((result) => {
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'New employee data has been saved',
-            showConfirmButton: false,
-            timer: 1500
-        }).then(function () {
-            location.reload();
+        data: register
+    }).done((results) => {
+        switch (results.status) {
+            case 200:
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'New employee data has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(function(){ location.reload() });
+                break;
+            default:
+                //might add custom validation specifically to the form fields
+                //var message = results.message;
+                //if (message.toLowerCase().contains("phone")) {
+                //    $('#phonefdbck').html(message);
+                //    <script>?
+                //}
+                //...etc
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration failed',
+                    text: results.message,
+                    footer: '<a href="">Check the backend programming</a>'
+                }).then(function () { });        
         }
-        );
     }).fail((error) => {
         Swal.fire({
             icon: 'error',
             title: 'Registration failed',
             text: "Invalid data",
             footer: '<a href="">Check the backend programming</a>'
-        }).then(function () {
-        }
-        );
+        }).then(function () { });
     })
 }
 
@@ -230,8 +266,7 @@ function GetUpdateModal(nik) {
             $('#uemail').attr('value', `${result.email}`);
             $('#uphone').attr('value', `${result.phone}`);
             $('#ubirthdate').attr('value', `${result.birthDate}`.toString().substring(0, 10));
-            $('#usalary').attr('value', `${result.salary}`);
-            //var currentgender; var altgender; var altgenderval;
+            $('#usalary').attr('value', `${result.salary}`); 
             if (result.gender == 0) {
                 $('#ugender').val("0")
             }
@@ -259,17 +294,33 @@ function Update() {
         type: "PUT",
         dataType: 'json',
         data: emp
-    }).done((result) => {
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: `The new data of ${emp.nik} has been saved`,
-            showConfirmButton: false,
-            timer: 1500
-        }).then(function () {
-            location.reload();
+    }).done((results) => {
+        console.log(results);
+        switch (results.status) {
+            case 200:
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: `The new data of ${emp.nik} has been saved`,
+                    showConfirmButton: false,
+                    timer: 2500
+                }).then(function () { location.reload() });
+                break;
+            default:
+                //might add custom validation specifically to the form fields
+                //var message = results.message;
+                //if (message.toLowerCase().contains("phone")) {
+                //    $('#phonefdbck').html(message);
+                //    <script>?
+                //}
+                //...etc
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration failed',
+                    text: results.message,
+                    footer: '<a href="">Check the backend programming</a>'
+                }).then(function () { });
         }
-        );
     }).fail((error) => {
         Swal.fire({
             position: 'center',

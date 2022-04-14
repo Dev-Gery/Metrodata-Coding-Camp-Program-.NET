@@ -41,7 +41,7 @@ namespace BelajarCORS.Base
         }
 
         [HttpPut]
-        public JsonResult Put(TEntity entity)
+        public virtual JsonResult Put(TEntity entity)
         {
             var result = repository.Put(entity);
             return Json(result);

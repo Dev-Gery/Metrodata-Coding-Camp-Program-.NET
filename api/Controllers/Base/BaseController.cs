@@ -87,7 +87,7 @@ namespace API.Controllers.Base
         }
         
         [HttpPut]
-        public ActionResult<Entity> Put(Entity entity)
+        public virtual ActionResult<Entity> Put(Entity entity)
         {
             try
             {
