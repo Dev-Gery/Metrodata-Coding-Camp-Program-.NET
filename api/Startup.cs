@@ -82,7 +82,6 @@ namespace api
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            
         }
     }
 }

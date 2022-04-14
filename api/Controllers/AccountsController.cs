@@ -30,7 +30,7 @@ namespace API.Controllers
             this.accountRepository = accountRepository;
         }
 
-        [Authorize(Roles = "Director, Manager")]
+        //[Authorize(Roles = "Director, Manager")]
         [HttpGet("getmasterdata/{NIK}")]
         public ActionResult GetTheMasterData(string NIK)
         {
@@ -39,20 +39,23 @@ namespace API.Controllers
                 var result = accountRepository.GetMasterEyeData(NIK);
                 if (result == null)
                 {
-                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                    //return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                    return NotFound(result);
                 }
                 else
                 {
-                    return Ok(new { Status = 200, Result = result, Message = "Data ditemukan" });
+                    //return Ok(new { Status = 200, Result = result, Message = "Data ditemukan" });
+                    return Ok(result);
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+                //return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+                return StatusCode(500);
             }
         }
 
-        [Authorize(Roles = "Director, Manager")]
+        //[Authorize(Roles = "Director, Manager")]
         [HttpGet("getmasterdata")]
         public ActionResult GetTheMasterData()
         {
@@ -62,37 +65,20 @@ namespace API.Controllers
                 if (result.Count() == 0)
                 {
                     return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
+                    //return NotFound(result);
+
                 }
                 else
                 {
                     return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
+                    //return Ok(result);
                 }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
+                //return StatusCode(500);
             }
-        }
-
-        [HttpGet("masterdata")]
-        public ActionResult TheMasterData()
-        {
-            //try
-            //{
-                var result = accountRepository.GetMasterEyeData();
-                if (result.Count() == 0)
-                {
-                    return NotFound(new { Status = 404, Result = result, Message = "Data tidak ditemukan" });
-                }
-                else
-                {
-                    return Ok(new { Status = 200, Result = result, Message = "Beberapa data ditemukan" });
-            }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message });
-            //}
         }
 
         public override ActionResult<Account> Post(Account account)
@@ -126,39 +112,40 @@ namespace API.Controllers
         [HttpPost("register")]
         public ActionResult RegisterUp(RegisterVM register)
         {
-            try
-            {
-                DataCheckConstants registration = accountRepository.Register(register);
-                if (registration == DataCheckConstants.ValidData)
-                {
-                    var result = accountRepository.GetMasterEyeData(register.NIK);
-                    return Ok(new { Status = 200, Result = result, Message = "Data berhasil dimasukkan" });
-                }
-                else if (registration == DataCheckConstants.NIKExists)
-                {
-                    return BadRequest(new { Status = 400, Message = "NIK hanya boleh mengandung karakter numerik" });
-                }
-                else if (registration == DataCheckConstants.NIKExists)
-                {
-                    return BadRequest(new { Status = 400, Message = "NIK sudah ada" });
-                }
-                else if (registration == DataCheckConstants.EmailExists)
-                {
-                    return BadRequest(new { Status = 400, Message = "Email sudah ada" });
-                }
-                else if (registration == DataCheckConstants.PhoneExists)
-                {
-                    return BadRequest(new { Status = 400, Message = "Phone sudah ada" });
-                }
-                else
-                {
-                    return BadRequest(new { Status = 400, Message = "Email dan Phone sudah ada" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-            }
+            return Ok(accountRepository.Register(register));
+            //try
+            //{
+            //    DataCheckConstants registration = accountRepository.Register(register);
+            //    if (registration == DataCheckConstants.ValidData)
+            //    {
+            //        var result = accountRepository.GetMasterEyeData(register.NIK);
+            //        return Ok(new { Status = 200, Result = result, Message = "Data berhasil dimasukkan" });
+            //    }
+            //    else if (registration == DataCheckConstants.NonNumericNIK)
+            //    {
+            //        return BadRequest(new { Status = 400, Message = "NIK hanya boleh mengandung karakter numerik" });
+            //    }
+            //    else if (registration == DataCheckConstants.NIKExists)
+            //    {
+            //        return BadRequest(new { Status = 400, Message = "NIK sudah ada" });
+            //    }
+            //    else if (registration == DataCheckConstants.EmailExists)
+            //    {
+            //        return BadRequest(new { Status = 400, Message = "Email sudah ada" });
+            //    }
+            //    else if (registration == DataCheckConstants.PhoneExists)
+            //    {
+            //        return BadRequest(new { Status = 400, Message = "Phone sudah ada" });
+            //    }
+            //    else
+            //    {
+            //        return BadRequest(new { Status = 400, Message = "Email dan Phone sudah ada" });
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            //}
         }
 
         [HttpPost("login")]

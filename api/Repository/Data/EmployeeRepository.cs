@@ -61,12 +61,8 @@ namespace API.Repository.Interface
         }
         public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye)
         {
-            if (string.IsNullOrWhiteSpace(eye.NIK))
+            if (!string.IsNullOrWhiteSpace(eye.NIK))
             { 
-                //GetNewAutoNIK() is postponed until all the data is valid
-            }
-            else
-            {
                 string fixNIK = Regex.Replace(eye.NIK, "\\s", "");
                 if (Regex.IsMatch(fixNIK, "^[0-9]+$"))
                 {
@@ -83,6 +79,10 @@ namespace API.Repository.Interface
                 {
                     return DataCheckConstants.NonNumericNIK;
                 }
+            }
+            else
+            {
+                //GetNewAutoNIK() is postponed until all the data is valid
             }
             Boolean emailDuplicate = false, phoneDuplicate = false;
             var emp = context.Employees.SingleOrDefault(x => x.Email.ToLower() == eye.Email.ToLower());
@@ -110,7 +110,10 @@ namespace API.Repository.Interface
             }
             else
             {
-                eye.NIK = GetNewAutoNIK(context);
+                if (string.IsNullOrWhiteSpace(eye.NIK))
+                {
+                    eye.NIK = GetNewAutoNIK(context);
+                }  
                 return DataCheckConstants.ValidData;
             }
         }
