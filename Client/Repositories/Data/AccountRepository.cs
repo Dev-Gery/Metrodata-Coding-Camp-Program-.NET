@@ -36,7 +36,17 @@ namespace BelajarCORS.Repositories.Data
             }
             return result;
         }
+        public async Task<object> GetMasterData(string NIK)
+        {
+            object result;
 
+            using (var response = await httpClient.GetAsync(request + $"getmasterdata/{NIK}"))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject(apiResponse);
+            }
+            return result;
+        }
         public object Register(RegisterVM registerVM)
         {
             object responseJSON;

@@ -32,7 +32,6 @@ namespace BelajarCORS.Repositories
             };
             //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _contextAccessor.HttpContext.Session.GetString("JWToken"));
         }
-
         public HttpStatusCode Delete(TId id)
         {
             var result = httpClient.DeleteAsync(request + id).Result;
@@ -40,28 +39,24 @@ namespace BelajarCORS.Repositories
         }
         public async Task<object> Get()
         {
-            object result;
-
+            object results;
             using (var response = await httpClient.GetAsync(request))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject(apiResponse);
+                results = JsonConvert.DeserializeObject(apiResponse);
             }
-            return result;
+            return results;
         }
-
-        public async Task<TEntity> Get(TId id)
+        public async Task<object> Get(TId id)
         {
-            TEntity entity = null;
-
+            object results;
             using (var response = await httpClient.GetAsync(request + id))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                entity = JsonConvert.DeserializeObject<TEntity>(apiResponse);
+                results = JsonConvert.DeserializeObject(apiResponse);
             }
-            return entity;
+            return results;
         }
-
         public HttpStatusCode Put(TId id, TEntity entity)
         {
             throw new NotImplementedException();

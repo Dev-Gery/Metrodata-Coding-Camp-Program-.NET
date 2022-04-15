@@ -27,6 +27,12 @@ namespace Client.Controllers
             var result = await repository.GetMasterData();
             return Json(result);
         }
+        [HttpGet("masterdata/{NIK}")]
+        public async Task<JsonResult> GetMasterData(string NIK)
+        {
+            var result = await repository.GetMasterData(NIK);
+            return Json(result);
+        }
 
         [HttpPost("register")]
         public JsonResult Register(RegisterVM registerVM)

@@ -59,14 +59,14 @@ namespace API.Repository.Interface
             NIKExists, NIKNotExists, NonNumericNIK, EmailExists, EmailNotExists, PhoneExists,
             EmailPhoneExist, ValidData, WrongOTP, InconsistentNewPassword, OTPIsUsed, OTPExpired
         }
-        public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye, string httpmethod = "post")
+        public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye, string httpMethod = "post")
         {
             if (!string.IsNullOrWhiteSpace(eye.NIK))
             { 
                 string fixNIK = Regex.Replace(eye.NIK, "\\s", "");
                 if (Regex.IsMatch(fixNIK, "^[0-9]+$"))
                 {
-                    if (httpmethod == "post" && context.Employees.Find(fixNIK) != null)
+                    if (httpMethod == "post" && context.Employees.Find(fixNIK) != null)
                     {
                         return DataCheckConstants.NIKExists;
                     }

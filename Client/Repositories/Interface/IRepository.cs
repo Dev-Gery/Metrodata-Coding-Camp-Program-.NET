@@ -10,7 +10,7 @@ namespace BelajarCORS.Repositories.Interface
         where T : class
     {
         Task<object> Get();
-        Task<T> Get(X id);
+        Task<object> Get(X id);
         HttpStatusCode Post(T entity);
         HttpStatusCode Put(X id, T entity);
         HttpStatusCode Put(T entity);

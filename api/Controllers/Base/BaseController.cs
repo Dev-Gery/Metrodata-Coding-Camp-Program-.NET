@@ -54,21 +54,18 @@ namespace API.Controllers.Base
                 var result = repository.Get(key);
                 if (result != null)
                     {
-                    //var response = new { Status = 200, result, Message = "Data ditemukan." };
-                    //return Ok(response);
-                    return Ok(result);
+                    var response = new { Status = 200, result, Message = "Data ditemukan." };
+                    return Ok(response);
                 }
                 else
                 {
-                    //var response = new { Status = 404, result, Message = "Data tidak ditemukan." };
-                    //return NotFound(response);
-                    return NotFound(result);
+                    var response = new { Status = 404, result, Message = "Data tidak ditemukan." };
+                    return NotFound(response);
                 }
             }
             catch (Exception ex)
             {
-                //return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, result = "null", message = ex.Message });
             }
         }
 

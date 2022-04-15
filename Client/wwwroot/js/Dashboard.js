@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿/* table data read and population */
+$(document).ready(function () {
     $('#TabelMasterData').DataTable({
         dom: "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
             "<'row'<'col-md-12'tr>>" +
@@ -48,6 +49,7 @@
         },
         "columns": [
             {
+                "name": "rownum",
                 data: null,
                 autoWidth: true,
                 render: function (data, type, row, meta) {
@@ -64,15 +66,17 @@
                 "data": "gender"
             },
             {
+                "name": "birthdate",
                 "data": null,
                 "render": function (data, type, row) {
                     return moment(row["birthDate"]).format('LL');
                 }
             },
             {
+                "name": "phone",
                 "data": null,
                 "render": function (data, type, row) {
-                    let phone = data['phone'];
+                    let phone = data["phone"];
                     if (phone != null && phone != '') {
                         if (phone[0] == '0') {
                             return "+62" + phone.substring(1);
@@ -89,12 +93,13 @@
                 "data": "role_Names"
             },
             {
+                "name": "salary",
                 "data": null,
                 "render": function (data, type, row) {
                     let sal = data['salary'].toString();
                     let salLength = sal.length;
-                    var newSal = '';
                     if (salLength > 3) {
+                        var newSal = '';
                         newSal = sal.substring(0, salLength % 3);
                         for (var i = newSal.length; i < salLength; i += 3) {
                             newSal += '.' + sal.substring(i, i + 3);
@@ -106,7 +111,7 @@
                 "autoWidth": true
             },
             {
-                "data": null,
+                "name": "actions",
                 "orderable": false,
                 render: function (data, type, row, meta) {
                     return `<div class="row">
@@ -124,12 +129,12 @@
     });
 });
 
+ /* charts */
 let universityData = [];
 $.ajax({
-    url: "universities/getall",
+    url: "universities",
     success: function (results) {
         var result = results.result;
-        console.log(result);
         let text = `<option selected value="">Choose...</option>`;
         $.each(result, function (key, val) {
             universityData.push({ x: val.name, y: 0 });
@@ -200,6 +205,7 @@ $.ajax({
     }
 })
 
+/* insert,update,delete */
 function Insert() {
     event.preventDefault();
     var register = {
@@ -258,15 +264,16 @@ function Insert() {
 
 function GetUpdateModal(nik) {
     $.ajax({
-        url: `employees/get/${nik}`,
-        success: function (result) {
-            $('#unik').attr('value', `${nik}`);
-            $('#ufirstname').attr('value', `${result.firstName}`);
-            $('#ulastname').attr('value', `${result.lastName}`);
-            $('#uemail').attr('value', `${result.email}`);
-            $('#uphone').attr('value', `${result.phone}`);
-            $('#ubirthdate').attr('value', `${result.birthDate}`.toString().substring(0, 10));
-            $('#usalary').attr('value', `${result.salary}`); 
+        url: `employees/${nik}`,
+        success: function (results) {
+            var result = results.result;
+            $('#unik').val(`${nik}`);
+            $('#ufirstname').val(`${result.firstName}`);
+            $('#ulastname').val(`${result.lastName}`);
+            $('#uemail').val(`${result.email}`);
+            $('#uphone').val(`${result.phone}`);
+            $('#ubirthdate').val(`${result.birthDate}`.toString().substring(0, 10));
+            $('#usalary').val(`${result.salary}`); 
             if (result.gender == 0) {
                 $('#ugender').val("0")
             }

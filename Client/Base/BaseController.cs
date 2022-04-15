@@ -19,14 +19,14 @@ namespace BelajarCORS.Base
             this.repository = repository;
         }
 
-        [HttpGet("getall")]
+        [HttpGet]
         public async Task<JsonResult> GetAll()
         {
             var result = await repository.Get();
             return Json(result);
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<JsonResult> Get(TId id)
         {
             var result = await repository.Get(id);
