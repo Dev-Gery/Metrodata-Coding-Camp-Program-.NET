@@ -19,16 +19,10 @@ namespace BelajarCORS.Repositories.Data
 {
     public class AccountRepository : GeneralRepository<Account, string>
     {
-        
-        public AccountRepository(Address address) : base(address, "Accounts/")
-        {
-            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _contextAccessor.HttpContext.Session.GetString("JWToken"));
-        }
-
+        public AccountRepository(Address address) : base(address, "Accounts/") { }
         public async Task<object> GetMasterData()
         {
             object result;
-
             using (var response = await httpClient.GetAsync(request + "getmasterdata"))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -59,16 +53,5 @@ namespace BelajarCORS.Repositories.Data
             return responseJSON;
         }
 
-        public object Login(LoginVM loginVM)
-        {
-            object results;
-            StringContent content = new StringContent(JsonConvert.SerializeObject(loginVM), Encoding.UTF8, "application/json");
-            using(var response = httpClient.PostAsync(request + "login", content).Result)
-            {
-                string apiResponse = response.Content.ReadAsStringAsync().Result;
-                results = JsonConvert.DeserializeObject(apiResponse);
-            }
-            return results;
-        }
     }
 }

@@ -28,14 +28,19 @@ namespace BelajarCORS.Repositories
             this._contextAccessor = new HttpContextAccessor();
             this.httpClient = new HttpClient
             {
-                BaseAddress = new Uri(address.link)
+                BaseAddress = new Uri(address.link),  
             };
-            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _contextAccessor.HttpContext.Session.GetString("JWToken"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("JWToken"));
         }
-        public HttpStatusCode Delete(TId id)
+        public object Delete(TId id)
         {
-            var result = httpClient.DeleteAsync(request + id).Result;
-            return result.StatusCode;
+            object results;
+            using (var response = httpClient.DeleteAsync(request + id).Result)
+            {
+                string apiResponse = response.Content.ReadAsStringAsync().Result;
+                results = JsonConvert.DeserializeObject(apiResponse);
+            }
+            return results;
         }
         public async Task<object> Get()
         {

@@ -5,7 +5,7 @@
         Password: $("#floatingPassword").val(),
     };
     $.ajax({
-        url: "accounts/login",
+        url: "logins/authenticate",
         type: "POST",
         dataType: 'json',
         data: loginVM
@@ -13,25 +13,24 @@
         console.log(results);
         switch (results.status) {
             case 200:
-                Swal.fire({
+                swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: 'Login success',
+                    title: 'login success',
                     showConfirmButton: false,
                     timer: 1500
                 }).then(function () {
-                    location.reload();
-                }
-                );
+                    window.location.href = "dashboard";
+                });
                 break;
             default:
-                Swal.fire({
+                swal.fire({
                     icon: 'error',
-                    title: 'Login Failed',
+                    title: 'login failed',
                     text: results.message,
-                    footer: '<a href="">Lupa Password?</a>'
+                    footer: '<a href="">lupa password?</a>'
                 }).then( function(){ } );
-        }
+        };
     }).fail((error) => {
         console.log(error);
         Swal.fire({
@@ -42,3 +41,4 @@
         }).then( function(){ } );
     })
 }
+

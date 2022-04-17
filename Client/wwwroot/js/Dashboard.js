@@ -43,19 +43,19 @@ $(document).ready(function () {
         "filter": true,
         "orderMulti": false,
         "ajax": {
-            "url": "accounts/masterdata",
-            "datatype": "json",
-            "dataSrc": "result"  
+            url: "accounts/masterdata",
+            datatype: "json",
+            dataSrc: "result"  
         },
         "columns": [
-            {
-                "name": "rownum",
-                data: null,
-                autoWidth: true,
-                render: function (data, type, row, meta) {
-                    return meta.row + 1
-                }
-            },
+            //{
+            //    "name": "rownum",
+            //    orderable: false,
+            //    autoWidth: true,
+            //    render: function (data, type, row, meta) {
+            //        return meta.row + 1
+            //    }
+            //},
             {
                 "data": "nik"
             },
@@ -353,22 +353,27 @@ function Delete(nik) {
             $.ajax({
                 url: `employees/${nik}`,
                 type: "DELETE"
-            }).done((result) => {
-                Swal.fire({
-                    title: "Delete Successful", text: `The employee data with NIK ${nik} has been deleted`,
-                    type: "success"
-                }).then(function () {
-                    location.reload();
+            }).done((results) => {
+                if (results.status == 200) {
+                    Swal.fire({
+                        title: "Delete Successful", text: `The employee data with NIK ${nik} has been deleted`,
+                        type: "success"
+                    }).then(function () {
+                        location.reload();
+                    }
+                    );
                 }
-                );
+                else {
+                    Swal.fire({
+                        title: "Delete Failed", text: results.message,
+                        type: "failed"
+                    }).then(function() { location.reload() });
+                }
             }).fail((error) => {
                 Swal.fire({
                     title: "Delete Failed", text: "Something went wrong!",
                     type: "failed"
-                }).then(function () {
-                    location.reload();
-                }
-                );
+                }).then(function() { location.reload() });
             });
         }
     })

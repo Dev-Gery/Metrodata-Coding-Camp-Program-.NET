@@ -128,7 +128,6 @@ namespace API.Repository.Interface
             myContext.SaveChanges();
             return dataCheck;
         }
-
         public new DataCheckConstants Update(Employee employee)
         {
             var dataCheck = EyeDataCheck(myContext, employee, "put");
@@ -140,7 +139,6 @@ namespace API.Repository.Interface
             myContext.SaveChanges();
             return dataCheck;
         }
-
         public override int Delete(string NIK)
         { 
             Employee emp = myContext.Employees.Find(NIK);
@@ -153,5 +151,6 @@ namespace API.Repository.Interface
             var result = myContext.SaveChanges();
             return result;
         }
+
     }
 }

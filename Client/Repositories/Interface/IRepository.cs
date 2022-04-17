@@ -14,6 +14,6 @@ namespace BelajarCORS.Repositories.Interface
         HttpStatusCode Post(T entity);
         HttpStatusCode Put(X id, T entity);
         HttpStatusCode Put(T entity);
-        HttpStatusCode Delete(X id);
+        object Delete(X id);
     }
 }

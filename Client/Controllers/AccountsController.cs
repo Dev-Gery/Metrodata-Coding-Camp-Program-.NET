@@ -27,6 +27,7 @@ namespace Client.Controllers
             var result = await repository.GetMasterData();
             return Json(result);
         }
+
         [HttpGet("masterdata/{NIK}")]
         public async Task<JsonResult> GetMasterData(string NIK)
         {
@@ -41,21 +42,5 @@ namespace Client.Controllers
             return Json(result);
         }
 
-        [HttpPost("login")]
-        public JsonResult Login(LoginVM loginVM)
-        {
-            var result = repository.Login(loginVM);
-            return Json(result);
-        }
-
     }
 }
-
-
-
-//[HttpGet]
-//public async Task<JsonResult> GetByNIK(string nik)
-//{
-//    var result = await repository.GetByNIK(nik);
-//    return Json(result);
-//}

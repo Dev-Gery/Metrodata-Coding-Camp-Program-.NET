@@ -30,7 +30,7 @@ namespace API.Controllers
             this.accountRepository = accountRepository;
         }
 
-        //[Authorize(Roles = "Director, Manager")]
+        [Authorize(Roles = "Director, Manager")]
         [HttpGet("getmasterdata/{NIK}")]
         public ActionResult GetTheMasterData(string NIK)
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
             }
         }
 
-        //[Authorize(Roles = "Director, Manager")]
+        [Authorize(Roles = "Director, Manager")]
         [HttpGet("getmasterdata")]
         public ActionResult GetTheMasterData()
         {
@@ -167,7 +167,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                var response = new { statusCode = HttpStatusCode.InternalServerError, message = ex.Message };
+                var response = new { status = HttpStatusCode.InternalServerError, message = ex.Message };
                 return StatusCode(500, response);
             }
         }
