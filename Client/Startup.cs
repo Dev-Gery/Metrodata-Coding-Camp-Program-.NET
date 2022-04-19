@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +36,7 @@ namespace Client
                 options.IdleTimeout = TimeSpan.FromMinutes(10);//set 10 menit   
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddScoped<EmployeeRepository>();
             services.AddScoped<AccountRepository>();
             services.AddScoped<UniversityRepository>();
@@ -44,7 +45,7 @@ namespace Client
             //
             services.AddHttpContextAccessor();
             //
-            services.AddControllers().AddNewtonsoftJson();
+
             services.AddAuthentication(auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,7 +66,7 @@ namespace Client
                 };
             });
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -79,6 +80,26 @@ namespace Client
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseStatusCodePages(async context =>
+            {
+                var request = context.HttpContext.Request;
+                var response = context.HttpContext.Response;
+
+                if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden))
+                {
+                    response.Redirect("/Admin/Forbidden");
+                }
+                else if (response.StatusCode.Equals((int)HttpStatusCode.Unauthorized))
+                {
+                    response.Redirect("/Admin/Unauthorized");
+                }
+                else if (response.StatusCode.Equals((int)HttpStatusCode.NotFound))
+                {
+                    response.Redirect("/Admin/Notfound");
+                }
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -102,8 +123,10 @@ namespace Client
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Admin}/{action=Index}/{id?}");
             });
+            
         }
+
     }
 }

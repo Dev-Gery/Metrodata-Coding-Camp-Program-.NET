@@ -13,26 +13,19 @@ using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
-    public class LoginsController : Controller
+    public class LoginController : Controller
     {
-        private readonly ILogger<LoginsController> _logger;
         private readonly LoginRepository repository;
-        public LoginsController(ILogger<LoginsController> logger, LoginRepository repository)
+        public LoginController(LoginRepository repository)
         {
-            _logger = logger;
             this.repository = repository;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [HttpPost]
         public JsonResult Authenticate(LoginVM login)
         {
             var results = repository.Ate(login);
-            if(results.jwt != null)
+            if (results.jwt != null)
             {
                 HttpContext.Session.SetString("JWToken", results.jwt);
                 //HttpContext.Session.SetString("Name", jwtHandler.GetName(token));

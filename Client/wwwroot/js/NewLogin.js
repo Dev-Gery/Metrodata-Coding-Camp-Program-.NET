@@ -1,11 +1,11 @@
 ﻿function Login() {
     event.preventDefault();
     var loginVM = {
-        Email: $("#floatingInput").val(),
-        Password: $("#floatingPassword").val(),
+        Email: $("#inputEmail").val(),
+        Password: $("#inputPassword").val(),
     };
     $.ajax({
-        url: "login/authenticate",
+        url: "https://localhost:44357/login/authenticate",
         type: "POST",
         dataType: 'json',
         data: loginVM

@@ -107,6 +107,7 @@ namespace API.Controllers
         [HttpPost("register")]
         public ActionResult RegisterUp(RegisterVM register)
         {
+
             try
             {
                 DataCheckConstants registration = accountRepository.Register(register);

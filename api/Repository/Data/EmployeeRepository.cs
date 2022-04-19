@@ -66,9 +66,12 @@ namespace API.Repository.Interface
                 string fixNIK = Regex.Replace(eye.NIK, "\\s", "");
                 if (Regex.IsMatch(fixNIK, "^[0-9]+$"))
                 {
-                    if (httpMethod == "post" && context.Employees.Find(fixNIK) != null)
+                    if (httpMethod == "post")
                     {
-                        return DataCheckConstants.NIKExists;
+                        if (context.Employees.Find(fixNIK) != null)
+                        {
+                            return DataCheckConstants.NIKExists;
+                        }
                     }
                     else
                     {
@@ -85,12 +88,12 @@ namespace API.Repository.Interface
                 //GetNewAutoNIK() is postponed until all the data is valid
             }
             Boolean emailDuplicate = false, phoneDuplicate = false;
-            var emp = context.Employees.SingleOrDefault(x => x.Email.ToLower() == eye.Email.ToLower() && x.NIK != eye.NIK);
+            var emp = context.Employees.SingleOrDefault(x => x.NIK != eye.NIK && x.Email.ToLower() == eye.Email.ToLower());
             if (emp != null)
             {
                 emailDuplicate = true;
             }
-            emp = context.Employees.SingleOrDefault(x => x.Phone == eye.Phone && x.NIK != eye.NIK);
+            emp = context.Employees.SingleOrDefault(x => x.NIK != eye.NIK && x.Phone == eye.Phone);
             if (emp != null)
             {
                 phoneDuplicate = true;
@@ -110,7 +113,7 @@ namespace API.Repository.Interface
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(eye.NIK))
+                if (httpMethod == "post" && string.IsNullOrWhiteSpace(eye.NIK))
                 {
                     eye.NIK = GetNewAutoNIK(context);
                 }  

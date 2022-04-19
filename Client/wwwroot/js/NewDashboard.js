@@ -1,4 +1,16 @@
 ﻿/* table data read and population */
+//$.fn.dataTable.ext.buttons.reload = {
+//    text: 'Reload',
+//    action: function (e, dt, node, config) {
+//        dt.ajax.reload();
+//    }
+//};
+$.fn.dataTable.ext.buttons.registration = {
+    text: 'Register',
+    action: function (e, dt, node, config) {
+        $('#registrationForm').modal('show')
+    }
+};
 $(document).ready(function () {
     $('#TabelMasterData').DataTable({
         dom: "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
@@ -9,6 +21,7 @@ $(document).ready(function () {
             className: 'ignore'
         }],
         buttons: [
+            'registration',
             {
                 extend: 'copy',
                 exportOptions: {
@@ -134,7 +147,6 @@ let universityData = [];
 $.ajax({
     url: "https://localhost:44357/universities",
     success: function (results) {
-        console.log("univ", results);
         var result = results.result;
         let text = `<option selected value="">Choose...</option>`;
         $.each(result, function (key, val) {
@@ -166,8 +178,9 @@ $.ajax({
                 }
             }
         });
-
-        var options = {
+        console.log("genders", genderDataArray);
+        console.log("universities", universityData);
+        var optionGender = {
             chart: {
                 type: "pie",
                 selection: {
@@ -185,10 +198,10 @@ $.ajax({
             series: genderDataArray,
             labels: ["Male", "Female"]
         }
-        var chart = new ApexCharts(document.querySelector("#genderschart"), options)
+        var chart = new ApexCharts(document.querySelector("#gendersChart"), optionGender)
         chart.render();
 
-        var options = {
+        var optionUni = {
             chart: {
                 height: 420,
                 type: "bar"
@@ -201,7 +214,7 @@ $.ajax({
                 type: 'category'
             }
         }
-        var chart = new ApexCharts(document.querySelector("#universitieschart"), options)
+        var chart = new ApexCharts(document.querySelector("#universitiesChart"), optionUni)
         chart.render();
     }
 })
@@ -222,8 +235,9 @@ function Insert() {
         Salary : $("#salary").val(),
         Birthdate: $("#birthdate").val()
     };
+    console.log(register);
     $.ajax({
-        url: "accounts/register",
+        url: "https://localhost:44357/accounts/register",
         type: "POST",
         dataType: 'json',
         data: register
@@ -265,7 +279,7 @@ function Insert() {
 
 function GetUpdateModal(nik) {
     $.ajax({
-        url: `employees/${nik}`,
+        url: `https://localhost:44357/employees/${nik}`,
         success: function (results) {
             var result = results.result;
             $('#unik').val(`${nik}`);
@@ -298,7 +312,7 @@ function Update() {
         birthDate: $("#ubirthdate").val()
     };
     $.ajax({
-        url: `employees`,
+        url: `https://localhost:44357/employees`,
         type: "PUT",
         dataType: 'json',
         data: emp
@@ -352,7 +366,7 @@ function Delete(nik) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: `employees/${nik}`,
+                url: `https://localhost:44357/employees/${nik}`,
                 type: "DELETE"
             }).done((results) => {
                 if (results.status == 200) {
