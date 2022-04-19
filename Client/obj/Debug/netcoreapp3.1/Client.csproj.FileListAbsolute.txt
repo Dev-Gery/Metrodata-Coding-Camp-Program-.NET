@@ -179,4 +179,3 @@ C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Clien
 C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Client\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Forbidden.cshtml.g.cs
 C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Client\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_AdminWelcomeLayout.cshtml.g.cs
 C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Client\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
-C:\Users\Nayn\OneDrive\Documents\GitHub\Metrodata-Coding-Camp-Program-.NET\Client\obj\Debug\netcoreapp3.1\Razor\Views\Admin\DashboardOld.cshtml.g.cs
