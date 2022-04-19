@@ -12,7 +12,7 @@ namespace API.Repository.Interface
     public class EmployeeRepository : GeneralRepository<MyContext, Employee, string>, IEmployeeRepository
     {
         private readonly MyContext myContext;
-        private static List<string> AutoNIK = new List<string>() { };
+        private static List<int> AutoNIK = new List<int>() { };
         public EmployeeRepository(MyContext context) : base(context)
         {
             myContext = context;
@@ -25,7 +25,7 @@ namespace API.Repository.Interface
             {
                 if (Regex.IsMatch(eye.NIK, RegExPattern))
                 {
-                    AutoNIK.Add(eye.NIK);
+                    AutoNIK.Add(int.Parse(eye.NIK));
                 }
                 else
                 {
@@ -38,7 +38,7 @@ namespace API.Repository.Interface
             }
             else
             {
-                AutoNIK.Add($"{autoNIKPattern}000");
+                AutoNIK.Add(int.Parse($"{autoNIKPattern}000"));
             }
         }
         public static string GetNewAutoNIK(MyContext context)
@@ -47,11 +47,11 @@ namespace API.Repository.Interface
             {
                 InitAutoNIK(context);
             }
-            string lastNIK = AutoNIK.Last();
+            string lastNIK = AutoNIK.Last().ToString();
             int incrementDigitPlace = lastNIK.Length - 1;
             int increment = Int32.Parse(lastNIK.Substring(incrementDigitPlace)) + 1;
             string newNIK = lastNIK.Substring(0, incrementDigitPlace) + increment.ToString();
-            AutoNIK.Add(newNIK);
+            AutoNIK.Add(int.Parse(newNIK));
             return newNIK;
         }
         public enum DataCheckConstants
@@ -61,32 +61,6 @@ namespace API.Repository.Interface
         }
         public static DataCheckConstants EyeDataCheck(MyContext context, Employee eye, string httpMethod = "post")
         {
-            if (!string.IsNullOrWhiteSpace(eye.NIK))
-            { 
-                string fixNIK = Regex.Replace(eye.NIK, "\\s", "");
-                if (Regex.IsMatch(fixNIK, "^[0-9]+$"))
-                {
-                    if (httpMethod == "post")
-                    {
-                        if (context.Employees.Find(fixNIK) != null)
-                        {
-                            return DataCheckConstants.NIKExists;
-                        }
-                    }
-                    else
-                    {
-                        eye.NIK = fixNIK;
-                    }
-                }
-                else
-                {
-                    return DataCheckConstants.NonNumericNIK;
-                }
-            }
-            else
-            {
-                //GetNewAutoNIK() is postponed until all the data is valid
-            }
             Boolean emailDuplicate = false, phoneDuplicate = false;
             var emp = context.Employees.SingleOrDefault(x => x.NIK != eye.NIK && x.Email.ToLower() == eye.Email.ToLower());
             if (emp != null)
@@ -113,10 +87,39 @@ namespace API.Repository.Interface
             }
             else
             {
-                if (httpMethod == "post" && string.IsNullOrWhiteSpace(eye.NIK))
+                if (httpMethod == "put")
                 {
-                    eye.NIK = GetNewAutoNIK(context);
-                }  
+                    return DataCheckConstants.ValidData;
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(eye.NIK))
+                    {
+                        eye.NIK = GetNewAutoNIK(context);
+                    }
+                    else 
+                    {
+                        string fixNIK = Regex.Replace(eye.NIK, "\\s", "");
+                        if (Regex.IsMatch(fixNIK, "^[0-9]+$"))
+                        {
+                            if (httpMethod == "post")
+                            {
+                                if (context.Employees.Find(fixNIK) != null)
+                                {
+                                    return DataCheckConstants.NIKExists;
+                                }
+                            }
+                            else
+                            {
+                                eye.NIK = fixNIK;
+                            }
+                        }
+                        else
+                        {
+                            return DataCheckConstants.NonNumericNIK;
+                        }
+                    }
+                }
                 return DataCheckConstants.ValidData;
             }
         }
@@ -150,7 +153,7 @@ namespace API.Repository.Interface
             {
                 InitAutoNIK(myContext);
             }
-            AutoNIK.Remove(NIK);
+            AutoNIK.Remove(int.Parse(NIK));
             var result = myContext.SaveChanges();
             return result;
         }

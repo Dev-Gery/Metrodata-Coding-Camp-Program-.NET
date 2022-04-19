@@ -64,10 +64,10 @@ namespace api.Context
                 .HasKey(aty => new { aty.Account_NIK, aty.Role_Id });
 
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder
-        //        .EnableSensitiveDataLogging();
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .EnableSensitiveDataLogging();
+        }
     }
 }
