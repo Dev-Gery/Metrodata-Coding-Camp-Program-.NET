@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Dashboard\**" />
+    <Compile Remove="Views\Employees\**" />
+    <Compile Remove="Views\Home\**" />
+    <Compile Remove="Views\Logins\**" />
+    <Content Remove="Views\Dashboard\**" />
+    <Content Remove="Views\Employees\**" />
+    <Content Remove="Views\Home\**" />
+    <Content Remove="Views\Logins\**" />
+    <EmbeddedResource Remove="Views\Dashboard\**" />
+    <EmbeddedResource Remove="Views\Employees\**" />
+    <EmbeddedResource Remove="Views\Home\**" />
+    <EmbeddedResource Remove="Views\Logins\**" />
+    <None Remove="Views\Dashboard\**" />
+    <None Remove="Views\Employees\**" />
+    <None Remove="Views\Home\**" />
+    <None Remove="Views\Logins\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\DashboardController.cs" />
+    <Compile Remove="Controllers\HomeController.cs" />
+    <Compile Remove="Controllers\LoginsController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Shared\_DashboardLayout.cshtml" />
+    <Content Remove="Views\Shared\_EmployeeLayout.cshtml" />
+    <Content Remove="Views\Shared\_LoginsLayout.cshtml" />
+    <Content Remove="Views\Shared\_TestLayout.cshtml" />
+    <Content Remove="wwwroot\css\Employee.css" />
+    <Content Remove="wwwroot\css\styles.css" />
+    <Content Remove="wwwroot\js\Dashboard.js" />
+    <Content Remove="wwwroot\js\datatables-simple-demo.js" />
+    <Content Remove="wwwroot\js\Employee.js" />
+    <Content Remove="wwwroot\js\Employees.js" />
+    <Content Remove="wwwroot\js\Login.js" />
+    <Content Remove="wwwroot\js\Site.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Admin\Forbidden.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\styles.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\api\API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Latihan\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
