@@ -113,7 +113,12 @@ $(document).ready(function () {
                     let salLength = sal.length;
                     if (salLength > 3) {
                         var newSal = '';
-                        newSal = sal.substring(0, salLength % 3);
+                        if (salLength % 3 != 0) {
+                            newSal = sal.substring(0, salLength % 3);
+                        }
+                        else {
+                            newSal = sal.substring(0, 3)
+                        }
                         for (var i = newSal.length; i < salLength; i += 3) {
                             newSal += '.' + sal.substring(i, i + 3);
                         }

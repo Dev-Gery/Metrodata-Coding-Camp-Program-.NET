@@ -34,7 +34,6 @@
     <Content Remove="Views\Shared\_EmployeeLayout.cshtml" />
     <Content Remove="Views\Shared\_LoginsLayout.cshtml" />
     <Content Remove="Views\Shared\_TestLayout.cshtml" />
-    <Content Remove="wwwroot\css\Dashboard.css" />
     <Content Remove="wwwroot\css\Employee.css" />
     <Content Remove="wwwroot\css\styles.css" />
     <Content Remove="wwwroot\js\Dashboard.js" />
